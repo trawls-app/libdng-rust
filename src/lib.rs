@@ -1,7 +1,14 @@
 #[cfg(test)]
 mod tests {
+    extern {
+        #[link(name = "dng", kind = "static")]
+        fn dummy();
+    }
+
     #[test]
     fn it_works() {
-        assert_eq!(2 + 2, 4);
+        unsafe {
+            dummy();
+        }
     }
 }

@@ -29,14 +29,16 @@ ADD_LIBRARY( xmp-sdk STATIC
              ${CMAKE_CURRENT_SOURCE_DIR}/XMPCore/source/XMPMeta-Serialize.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/XMPCore/source/XMPMeta.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/XMPCore/source/XMPUtils-FileInfo.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/XMPCore/source/XMPUtils.cpp )
+             ${CMAKE_CURRENT_SOURCE_DIR}/XMPCore/source/XMPUtils.cpp
+             ${CMAKE_CURRENT_SOURCE_DIR}/third-party/zuid/interfaces/MD5.cpp )
+
 
 TARGET_INCLUDE_DIRECTORIES( xmp-sdk PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/public/include
                                     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
 TARGET_COMPILE_DEFINITIONS( xmp-sdk PUBLIC
                             -DUNIX_ENV=1             # Windows is -DWIN_ENV=1
-#                           -XMP_64=1                # manually set 64-bit
+#                            -XMP_64=1                # manually set 64-bit
                           )
 TARGET_COMPILE_OPTIONS( xmp-sdk PRIVATE -w )
 
-TARGET_LINK_LIBRARIES( xmp-sdk PRIVATE md5 ${EXPAT_LIBRARIES} )
+TARGET_LINK_LIBRARIES( xmp-sdk PRIVATE ${EXPAT_LIBRARIES} )
