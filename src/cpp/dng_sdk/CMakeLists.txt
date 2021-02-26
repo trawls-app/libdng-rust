@@ -77,9 +77,18 @@ ${CMAKE_CURRENT_SOURCE_DIR}/source/dng_xy_coord.cpp )
 
 TARGET_INCLUDE_DIRECTORIES( dng_sdk PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/source ${CMAKE_SOURCE_DIR}/xmp_sdk/public/include ${CMAKE_SOURCE_DIR}/libjpeg)
 
+IF (WIN32)
+  SET(PLATFORM_DEFINITIONS -DqWinOS=1 -DqMacOS=0 -DqLinux=0 -DUNIX_ENV=0)
+ELSE()
+  IF (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    SET(PLATFORM_DEFINITIONS -DqWinOS=0 -DqMacOS=1 -DqLinux=0 -DUNIX_ENV=1)
+  ELSE ()
+    SET(PLATFORM_DEFINITIONS -DqWinOS=0 -DqMacOS=0 -DqLinux=1 -DUNIX_ENV=1)
+  ENDIF()
+ENDIF()
+
 TARGET_COMPILE_DEFINITIONS( dng_sdk PUBLIC
-                            -DqWinOS=0 -DqMacOS=0 -DqLinux=1   # platform for dng-sdk
-                            -DUNIX_ENV=1
+                            ${PLATFORM_DEFINITIONS}
                             -DqDNGThreadSafe=1                 # we're thread-safe - will use pthreads
 #                            -DqDNG64Bit=1                      # set manually to support 64bit platforms (todo: add test)
                             -DqDNGDebug=0                      # do not compile debug code
