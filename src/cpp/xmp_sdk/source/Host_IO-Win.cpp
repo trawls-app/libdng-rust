@@ -549,13 +549,12 @@ void Host_IO::CloseFolder ( Host_IO::FolderRef folder )
 bool Host_IO::GetNextChild ( Host_IO::FolderRef folder, std::string* childName )
 {
 	bool found;
-	// WIN32_FIND_DATAW childInfo;
-	LPWIN32_FIND_DATAA childInfo;
+	WIN32_FIND_DATAW childInfo;
 
 	if ( folder == Host_IO::noFolderRef ) return false;
 
 	do {	// Ignore all children with names starting in '.'. This covers ., .., .DS_Store, etc.
-		found = (bool) FindNextFile ( folder, &childInfo );
+		found = (bool) FindNextFile ( folder, childInfo );
 	} while ( found && (childInfo.cFileName[0] == '.') );
 	if ( ! found ) return false;
 
