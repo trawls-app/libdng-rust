@@ -9,7 +9,7 @@ fn main() {
     let dst = if target.contains("apple") || target.contains("linux") {
         Config::new("src/cpp").build()
     } else {
-        Config::new("src/cpp").generator("MSYS Makefiles").build()
+        Config::new("src/cpp").define("CMAKE_CXX_COMPILER", "g++").define("CMAKE_CC_COMPILER", "gcc").build()
     };
 
     println!("cargo:rustc-link-search=native={}", dst.display());
