@@ -35,11 +35,18 @@ ADD_LIBRARY( xmp-sdk STATIC
 
 TARGET_INCLUDE_DIRECTORIES( xmp-sdk PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/public/include
                                     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
-TARGET_COMPILE_DEFINITIONS( xmp-sdk PUBLIC
-                            -DUNIX_ENV=1             # Windows is -DWIN_ENV=1
-#                            -XMP_64=1                # manually set 64-bit
-                              -std=c++11
-                          )
+
+
+
+IF (WIN32)
+  TARGET_COMPILE_DEFINITIONS( xmp-sdk PUBLIC -DWIN_ENV=1 -std=c++11 )
+ELSE()
+  TARGET_COMPILE_DEFINITIONS( xmp-sdk PUBLIC -DUNIX_ENV=1 -std=c++11 )
+ENDIF()
+
+# -XMP_64=1                # manually set 64-bit
+
+
 TARGET_COMPILE_OPTIONS( xmp-sdk PRIVATE -w )
 
 TARGET_LINK_LIBRARIES( xmp-sdk PRIVATE ${EXPAT_LIBRARIES} )
