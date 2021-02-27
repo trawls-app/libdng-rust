@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 project(dng)
 
+IF(MSVC)
+    SET(CMAKE_CXX_FLAGS "/EHsc")
+ENDIF(MSVC)
+
 ADD_SUBDIRECTORY(libjpeg)
 ADD_SUBDIRECTORY(xmp_sdk)
 ADD_SUBDIRECTORY(dng_sdk)
