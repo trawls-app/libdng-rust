@@ -4,7 +4,12 @@ use std::env;
 
 
 fn main() {
-    let dst = Config::new("src/cpp").build();
+    let target  = env::var("TARGET").unwrap();
+
+    let dst = match target.as_str() {
+        "windows" =>  Config::new("src/cpp").generator("MinGW Makefiles").build(),
+        _ => Config::new("src/cpp").build()
+    };
 
     println!("cargo:rustc-link-search=native={}", dst.display());
     println!("cargo:rustc-link-lib=static=dng");
@@ -14,7 +19,7 @@ fn main() {
     println!("cargo:rustc-link-lib=dylib=expat");
     println!("cargo:rustc-link-lib=static=z");
 
-    let target  = env::var("TARGET").unwrap();
+
     if target.contains("apple")
     {
         println!("cargo:rustc-link-lib=dylib=c++");
