@@ -1,4 +1,4 @@
-FIND_PACKAGE(Threads)
+#FIND_PACKAGE(Threads)
 
 
 
@@ -89,7 +89,7 @@ ENDIF()
 
 TARGET_COMPILE_DEFINITIONS( dng_sdk PUBLIC
                             ${PLATFORM_DEFINITIONS}
-                            -DqDNGThreadSafe=1                 # we're thread-safe - will use pthreads
+                            -DqDNGThreadSafe=0                 # we're thread-safe - will use pthreads
 #                            -DqDNG64Bit=1                      # set manually to support 64bit platforms (todo: add test)
                             -DqDNGDebug=0                      # do not compile debug code
                             -DqDNGValidateTarget=0             # do not build dng_validate-binary
