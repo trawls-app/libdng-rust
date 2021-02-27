@@ -6,9 +6,10 @@ use std::env;
 fn main() {
     let target  = env::var("TARGET").unwrap();
 
-    let dst = match target.as_str() {
-        "windows" =>  Config::new("src/cpp").generator("MinGW Makefiles").build(),
-        _ => Config::new("src/cpp").build()
+    let dst = if target.contains("apple") || target.contains("linux") {
+        Config::new("src/cpp").build()
+    } else {
+        Config::new("src/cpp").generator("MinGW Makefiles").build()
     };
 
     println!("cargo:rustc-link-search=native={}", dst.display());
