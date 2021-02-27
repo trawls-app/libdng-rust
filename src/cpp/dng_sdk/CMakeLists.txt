@@ -75,7 +75,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/source/dng_xmp.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/source/dng_xmp_sdk.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/source/dng_xy_coord.cpp )
 
-TARGET_INCLUDE_DIRECTORIES( dng_sdk PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/source ${CMAKE_SOURCE_DIR}/xmp_sdk/public/include ${CMAKE_SOURCE_DIR}/libjpeg)
+TARGET_INCLUDE_DIRECTORIES( dng_sdk PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/source ${CMAKE_SOURCE_DIR}/xmp_sdk/public/include ${CMAKE_SOURCE_DIR}/xmp_sdk/third-party/zlib ${CMAKE_SOURCE_DIR}/libjpeg)
 
 IF (WIN32)
   SET(PLATFORM_DEFINITIONS -DqWinOS=1 -DqMacOS=0 -DqLinux=0)
