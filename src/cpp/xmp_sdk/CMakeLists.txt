@@ -5,9 +5,14 @@ ADD_DEFINITIONS(${EXPAT_DEFINITIONS})
 # =======================================================
 # XMP SDK source code.
 
+IF (WIN32)
+  SET(HOST_IO ${CMAKE_CURRENT_SOURCE_DIR}/source/Host_IO-Win.cpp)
+ELSE()
+  SET(HOST_IO ${CMAKE_CURRENT_SOURCE_DIR}/source/Host_IO-POSIX.cpp)
+ENDIF()
+
 ADD_LIBRARY( xmp-sdk STATIC
-             ${CMAKE_CURRENT_SOURCE_DIR}/source/Host_IO-POSIX.cpp
-#            ${CMAKE_CURRENT_SOURCE_DIR}/source/Host_IO-Win.cpp
+             ${HOST_IO}
              ${CMAKE_CURRENT_SOURCE_DIR}/source/IOUtils.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/source/PerfUtils.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/source/SafeStringAPIs.cpp
