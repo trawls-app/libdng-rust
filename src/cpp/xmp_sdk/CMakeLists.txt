@@ -38,6 +38,7 @@ TARGET_INCLUDE_DIRECTORIES( xmp-sdk PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/public/in
 TARGET_COMPILE_DEFINITIONS( xmp-sdk PUBLIC
                             -DUNIX_ENV=1             # Windows is -DWIN_ENV=1
 #                            -XMP_64=1                # manually set 64-bit
+                              -std=c++11
                           )
 TARGET_COMPILE_OPTIONS( xmp-sdk PRIVATE -w )
 
