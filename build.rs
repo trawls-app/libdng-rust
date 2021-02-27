@@ -9,7 +9,7 @@ fn main() {
     let dst = if target.contains("apple") || target.contains("linux") {
         Config::new("src/cpp").build()
     } else {
-        Config::new("src/cpp").generator("MinGW Makefiles").build()
+        Config::new("src/cpp").generator("MSYS Makefiles").build()
     };
 
     println!("cargo:rustc-link-search=native={}", dst.display());
