@@ -10,7 +10,6 @@ IF(MSVC)
 ENDIF(MSVC)
 
 find_package(ZLIB REQUIRED)
-target_link_libraries(main PRIVATE)
 
 ADD_SUBDIRECTORY(libjpeg)
 ADD_SUBDIRECTORY(xmp_sdk)
