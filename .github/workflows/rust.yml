@@ -37,7 +37,7 @@ jobs:
       with:
         vcpkgArguments: 'zlib expat'
         vcpkgDirectory: '${{ github.workspace }}/src/cpp/vcpkg'
-        VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
+        vcpkgTriplet: ${{ matrix.triplet }}
     - name: Build
       run: |
         cmake --help
