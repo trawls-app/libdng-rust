@@ -20,11 +20,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
     - name: Run vcpkg
       uses: lukka/run-vcpkg@v4
       with:
         vcpkgArguments: 'zlib expat'
-        vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+        vcpkgDirectory: '${{ github.workspace }}/src/cpp/vcpkg'
     - name: Build
       run: |
         cmake --help
