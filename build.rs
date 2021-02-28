@@ -18,7 +18,7 @@ fn main() {
     println!("cargo:rustc-link-lib=static=xmp-sdk");
     println!("cargo:rustc-link-lib=static=libjpeg");
     println!("cargo:rustc-link-lib=dylib=expat");
-    println!("cargo:rustc-link-lib=static=zlibstatic");
+    println!("cargo:rustc-link-lib=static=z");
 
 
     if target.contains("apple")
