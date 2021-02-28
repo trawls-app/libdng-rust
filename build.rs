@@ -7,7 +7,7 @@ fn main() {
     let target  = env::var("TARGET").unwrap();
 
     let dst = if target.contains("apple") || target.contains("linux") {
-        Config::new("src/cpp").build()
+        Config::new("src/cpp").very_verbose(true).define("CMAKE_TOOLCHAIN_FILE", "vcpkg/scripts/buildsystems/vcpkg.cmake").build()
     } else {
         Config::new("src/cpp").define("CMAKE_CXX_COMPILER", "g++").define("CMAKE_CC_COMPILER", "gcc").host("").build()
     };
@@ -18,7 +18,7 @@ fn main() {
     println!("cargo:rustc-link-lib=static=xmp-sdk");
     println!("cargo:rustc-link-lib=static=libjpeg");
     println!("cargo:rustc-link-lib=dylib=expat");
-    println!("cargo:rustc-link-lib=static=zlib");
+    println!("cargo:rustc-link-lib=static=libz");
 
 
     if target.contains("apple")
