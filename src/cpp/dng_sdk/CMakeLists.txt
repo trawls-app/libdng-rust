@@ -1,5 +1,5 @@
 #FIND_PACKAGE(Threads)
-find_package(ZLIB REQUIRED)
+#find_package(ZLIB REQUIRED)
 
 
 # =======================================================
@@ -105,4 +105,4 @@ ENDIF(NOT IS_BIG_ENDIAN)
 
 TARGET_COMPILE_OPTIONS( dng_sdk PRIVATE -fexceptions -std=c++11 )
 
-TARGET_LINK_LIBRARIES( dng_sdk PRIVATE xmp_sdk ${CMAKE_THREAD_LIBS_INIT} ZLIB::ZLIB )
+TARGET_LINK_LIBRARIES( dng_sdk PRIVATE xmp_sdk ${CMAKE_THREAD_LIBS_INIT} )
