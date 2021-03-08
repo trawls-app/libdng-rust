@@ -18,7 +18,8 @@ fn main() {
     println!("cargo:rustc-link-lib=static=xmp-sdk");
     println!("cargo:rustc-link-lib=static=libjpeg");
     println!("cargo:rustc-link-lib=dylib=expat");
-    println!("cargo:rustc-link-lib=static=libz");
+    //println!("cargo:rustc-link-lib=static=zlibstatic");
+    vcpkg::find_package("zlib").unwrap();
 
 
     if target.contains("apple")

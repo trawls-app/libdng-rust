@@ -28,5 +28,5 @@ TARGET_INCLUDE_DIRECTORIES( dng PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
 # TARGET_COMPILE_DEFINITIONS( dng PRIVATE -DkLocalUseThreads=1 )
 TARGET_COMPILE_OPTIONS( dng PUBLIC -fexceptions -std=c++11 )
 
-TARGET_LINK_LIBRARIES( dng dng_sdk xmp-sdk libjpeg ZLIB::ZLIB)
+TARGET_LINK_LIBRARIES( dng PRIVATE dng_sdk xmp-sdk libjpeg ZLIB::ZLIB)
 install(TARGETS dng dng_sdk xmp-sdk libjpeg DESTINATION .)
