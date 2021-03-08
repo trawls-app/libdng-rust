@@ -9,7 +9,7 @@ IF(MSVC)
     SET(CMAKE_CXX_FLAGS "/EHsc")
 ENDIF(MSVC)
 
-find_package(ZLIB REQUIRED)
+#find_package(ZLIB REQUIRED)
 
 ADD_SUBDIRECTORY(libjpeg)
 ADD_SUBDIRECTORY(xmp_sdk)

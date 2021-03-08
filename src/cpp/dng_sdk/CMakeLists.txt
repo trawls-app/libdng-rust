@@ -1,5 +1,5 @@
 #FIND_PACKAGE(Threads)
-find_package(ZLIB REQUIRED)
+#find_package(ZLIB REQUIRED)
 
 
 # =======================================================
