@@ -18,7 +18,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         include:
           - os: windows-latest
-            triplet: x64-windows-static
+            triplet: x64-windows-static-md
             configuration: 'x64.*'
           - os: ubuntu-latest
             triplet: x64-linux
@@ -35,6 +35,8 @@ jobs:
     - name: Install cargo-Vcpkg
       run: cargo install cargo-vcpkg
     - name: Build vcpkg
+      env:
+        - VCPKGRS_TRIPLET: ${{ matrix.triplet }}
       run: cargo vcpkg build
     - name: Build
       run: cargo build --verbose
