@@ -17,7 +17,7 @@ fn main() {
     println!("cargo:rustc-link-lib=static=dng_sdk");
     println!("cargo:rustc-link-lib=static=xmp-sdk");
     println!("cargo:rustc-link-lib=static=libjpeg");
-    println!("cargo:rustc-link-lib=dylib=expat");
+    //println!("cargo:rustc-link-lib=dylib=expat");
     //println!("cargo:rustc-link-lib=static=zlibstatic");
 
 
@@ -35,4 +35,5 @@ fn main() {
     }
 
     vcpkg::find_package("zlib").unwrap();
+    vcpkg::find_package("expat").unwrap();
 }
