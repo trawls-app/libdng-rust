@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
-  CACHE STRING "Vcpkg toolchain file")
+#set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
+#  CACHE STRING "Vcpkg toolchain file")
 
 project(dng)
 
@@ -28,5 +28,5 @@ TARGET_INCLUDE_DIRECTORIES( dng PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
 # TARGET_COMPILE_DEFINITIONS( dng PRIVATE -DkLocalUseThreads=1 )
 TARGET_COMPILE_OPTIONS( dng PUBLIC -fexceptions -std=c++11 )
 
-TARGET_LINK_LIBRARIES( dng PRIVATE dng_sdk xmp-sdk libjpeg ZLIB::ZLIB)
+TARGET_LINK_LIBRARIES( dng PRIVATE dng_sdk xmp-sdk libjpeg )
 install(TARGETS dng dng_sdk xmp-sdk libjpeg DESTINATION .)
