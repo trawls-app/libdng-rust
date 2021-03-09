@@ -41,6 +41,6 @@ jobs:
     - name: Build vcpkg
       run: cargo vcpkg build
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --verbose --release
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test --verbose --release
