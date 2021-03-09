@@ -28,7 +28,9 @@ jobs:
             configuration: '.*Linux.*'
     env:
       VCPKGRS_TRIPLET: ${{ matrix.triplet }}
+      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
       RUSTFLAGS: -Ctarget-feature=+crt-static
+      TARGET: x86_64-pc-windows-msvc
     runs-on: ${{ matrix.os }}
 
     steps:
