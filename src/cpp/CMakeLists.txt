@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(dng)
 
-#IF(MSVC)
+IF(MSVC)
     SET(CMAKE_CXX_FLAGS "/EHsc /MT")
 ENDIF(MSVC)
 
