@@ -97,11 +97,11 @@ TARGET_COMPILE_DEFINITIONS( dng_sdk PUBLIC
                             -DqDNGXMPFiles=0 -DqDNGXMPDocOps=0 # build minimal XMP-set
                             -DqDNGUseStdInt=1 )                # Must be set to 1, else do not compile under Linux.
 # Check processor endianness (todo: not sure bigEndian platforms are set correctly)
-INCLUDE(TestBigEndian)
-TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
-IF(NOT IS_BIG_ENDIAN)
-    ADD_DEFINITIONS(-DqDNGLittleEndian=1)
-ENDIF(NOT IS_BIG_ENDIAN)
+#INCLUDE(TestBigEndian)
+#TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
+#IF(NOT IS_BIG_ENDIAN)
+#    ADD_DEFINITIONS(-DqDNGLittleEndian=1)
+#ENDIF(NOT IS_BIG_ENDIAN)
 
 TARGET_COMPILE_OPTIONS( dng_sdk PRIVATE -fexceptions -std=c++11 )
 
