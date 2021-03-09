@@ -31,7 +31,7 @@ fn main() {
     }
     else
     {
-        println!("cargo:rustc-link-lib=dylib=stdc++");
+        //println!("cargo:rustc-link-lib=dylib=stdc++");
     }
 
     vcpkg::find_package("zlib").unwrap();
