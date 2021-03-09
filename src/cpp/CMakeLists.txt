@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(dng)
 
-IF(MSVC)
-    SET(CMAKE_CXX_FLAGS "/EHsc")
+#IF(MSVC)
+    SET(CMAKE_CXX_FLAGS "/EHsc /MT")
 ENDIF(MSVC)
 
 #find_package(ZLIB REQUIRED)
