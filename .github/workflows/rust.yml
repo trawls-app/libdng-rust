@@ -28,6 +28,7 @@ jobs:
             configuration: '.*Linux.*'
     env:
       VCPKGRS_TRIPLET: ${{ matrix.triplet }}
+      RUSTFLAGS: -Ctarget-feature=+crt-static
     runs-on: ${{ matrix.os }}
 
     steps:
