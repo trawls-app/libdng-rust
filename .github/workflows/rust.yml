@@ -29,7 +29,7 @@ jobs:
       uses: lukka/run-vcpkg@v6
       with:
         setupOnly: true
-        vcpkgDirectory: '${{ github.workspace }}src/cpp/vcpkg'
+        vcpkgDirectory: '${{ github.workspace }}/src/cpp/vcpkg'
       # Now that vcpkg is installed, it is being used to run with the desired arguments.
 
     - name: Build
