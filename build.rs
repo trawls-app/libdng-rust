@@ -6,7 +6,7 @@ use std::env;
 fn main() {
     let target  = env::var("TARGET").unwrap();
 
-    let dst = Config::new("src/cpp").very_verbose(true).build();
+    let dst = Config::new("src/cpp").build();
 
     println!("cargo:rustc-link-search=native={}", dst.display());
     println!("cargo:rustc-link-lib=static=dngbindings");
