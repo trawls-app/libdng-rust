@@ -10,3 +10,4 @@ ADD_SUBDIRECTORY(dng_sdk)
 
 add_library(dngbindings dng.cpp)
 target_link_libraries(dngbindings STATIC dng-sdk)
+install(TARGETS dngbindings)

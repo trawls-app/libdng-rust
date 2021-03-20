@@ -10,4 +10,3 @@ edition = "2018"
 
 [build-dependencies]
 cmake = "0.1.45"
-vcpkg = "0.2.11"
