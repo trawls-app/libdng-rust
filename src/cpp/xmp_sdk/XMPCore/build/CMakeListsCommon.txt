@@ -7,7 +7,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 
 # ==============================================================================
-# For convenience we define the sources as a variable. You can add
+# For convenience we define the sources as a variable. You can add 
 # header files and cpp/c files and CMake will sort them out
 # ==============================================================================
 
@@ -32,13 +32,13 @@ if (INCLUDE_CPP_DOM_SOURCE)
 	source_group("Source Files\\Private\\XMPCommon" FILES ${PRIVATE_XMPCOMMON_SOURCES})
 endif (INCLUDE_CPP_DOM_SOURCE)
 
-file (GLOB PRIVATE_XMPCORE_HEADERS
-	${XMPROOT_DIR}/XMPCore/*.h
-	${XMPROOT_DIR}/XMPCore/ImplHeaders/*.h
-	${XMPROOT_DIR}/XMPCore/headers/*.h
+file (GLOB PRIVATE_XMPCORE_HEADERS 
+	${XMPROOT_DIR}/XMPCore/*.h 
+	${XMPROOT_DIR}/XMPCore/ImplHeaders/*.h 
+	${XMPROOT_DIR}/XMPCore/headers/*.h 
 	${XMPROOT_DIR}/XMPCore/Interfaces/*.h )
 source_group("Header Files\\Private\\XMPCore" FILES ${PRIVATE_XMPCORE_HEADERS})
-
+	
 file (GLOB_RECURSE PUBLIC_CLIENTGLUE_HEADER_FILES ${XMPROOT_DIR}/public/include/client-glue/*.*)
 list (REMOVE_ITEM PUBLIC_CLIENTGLUE_HEADER_FILES
 	${XMPROOT_DIR}/public/include/client-glue/TXMPFiles.incl_cpp
@@ -129,7 +129,7 @@ endif()
 source_group("Resource Files" FILES ${RESOURCE_FILES})
 
 if (WIN32 OR UNIX)
-	list(APPEND SOURCE_FILES
+	list(APPEND SOURCE_FILES 
 		${PUBLIC_CLIENTGLUE_HEADER_FILES}
 		${PUBLIC_HEADER_FILES}
 		${INTERNAL_HEADER_FILES}
@@ -171,7 +171,7 @@ endif ()
 link_directories(${OUTPUT_DIR})
 
 # ==============================================================================
-# Define what to do, lib, exe, etc
+# Define what to do, lib, exe, etc 
 if (UNIX AND APPLE AND NOT ${XMP_BUILD_STATIC})
 	# preprocess Info.plist
 	#if (${CMAKE_BUILD_TYPE} strequal "Debug")
@@ -291,3 +291,5 @@ message (STATUS "===============================================================
 message (STATUS " ${PROJECT_NAME} ")
 message (STATUS "===========================================================================")
 message (STATUS " OUTPUT_DIR = ${OUTPUT_DIR}")
+
+

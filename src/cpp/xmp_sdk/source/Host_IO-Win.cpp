@@ -4,7 +4,7 @@
 // All Rights Reserved
 //
 // NOTICE: Adobe permits you to use, modify, and distribute this file in accordance with the terms
-// of the Adobe license agreement accompanying it. If you have received this file from a source other
+// of the Adobe license agreement accompanying it. If you have received this file from a source other 
 // than Adobe, then your use, modification, or distribution of it requires the prior written permission
 // of Adobe.
 // =================================================================================================
@@ -90,7 +90,7 @@ bool Host_IO::Writable( const char * path, bool checkCreationPossible )
 			return false;
 			break;
 		}
-	}
+	} 
 	else if ( checkCreationPossible )
 	{
 		// file doesn't exist. Let's check if we can create it temporarily.
@@ -195,11 +195,11 @@ bool Host_IO::GetModifyDate ( const char* filePath, XMP_DateTime * modifyDate )
 	ok = GetFileTime ( fileHandle, 0, 0, &binTime );
 	Host_IO::Close ( fileHandle );
 	if ( ! ok ) return false;
-
+	
 	SYSTEMTIME utcTime;
 	ok = FileTimeToSystemTime ( &binTime, &utcTime );
 	if ( ! ok ) return false;
-
+	
 	FillXMPTime ( utcTime, modifyDate );
 	return true;
 
@@ -285,14 +285,14 @@ void Host_IO::SwapData ( const char* sourcePath, const char* destPath )
 	XMP_Assert ( ! Host_IO::Exists ( thirdPath.c_str() ) );
 
 	Host_IO::Rename ( sourcePath, thirdPath.c_str() );
-
+	
 	try {
 		Host_IO::Rename ( destPath, sourcePath );
 	} catch ( ... ) {
 		Host_IO::Rename ( thirdPath.c_str(), sourcePath );
 		throw;
 	}
-
+	
 	try {
 		Host_IO::Rename ( thirdPath.c_str(), destPath );
 	} catch ( ... ) {
@@ -336,10 +336,10 @@ void Host_IO::Delete ( const char* filePath )
 	std::string wideName;
 	if ( !GetWidePath ( filePath, wideName ) || wideName.length() == 0 )
 		XMP_Throw ( "Host_IO::Delete, GetWidePath failure", kXMPErr_ExternalFailure );
-
+	
 	if ( !::Exists ( wideName ) ) return;
 
-
+	
 
 	BOOL ok = DeleteFileW ( (LPCWSTR)wideName.data() );
 	if ( ! ok ) {
@@ -467,7 +467,7 @@ Host_IO::FileMode Host_IO::GetFileMode ( const char * path )
 	std::string utf16;	// GetFileAttributes wants native UTF-16.
 	if ( !GetWidePath ( path, utf16 ) )
 		XMP_Throw ( "Host_IO::GetFileMode, GetWidePath failure", kXMPErr_ExternalFailure );
-
+	
 	return ::GetFileMode( utf16 );
 }	// Host_IO::GetFileMode
 
@@ -653,7 +653,7 @@ bool Exists ( const std::string & widePath )
 		attrs = fileDataAttr.dwFileAttributes;
 #else
 	attrs = GetFileAttributesW ( (LPCWSTR)widePath.data() );
-#endif
+#endif 
 
 	return ( attrs != INVALID_FILE_ATTRIBUTES);
 }
@@ -789,7 +789,7 @@ static std::string ConstructPreservedPath( const std::string& inputPath )
 	}
 	if (isNetworkPath) skipServerAndShareName=2;
 	bool loopvar=true;
-	while(loopvar)
+	while(loopvar) 
 	{
 		size_t newpos = utfPath.find_first_of( pathSep, pos );
 		if ( newpos ==  std::string::npos )
@@ -813,7 +813,7 @@ static std::string ConstructPreservedPath( const std::string& inputPath )
 #endif
 			if( searchNext == INVALID_HANDLE_VALUE || ! ::FindClose(searchNext) )
 				XMP_Throw ( "Host_IO::GetCasePresevedLeafName, cannot convert path", kXMPErr_ExternalFailure );
-
+			
 			allocate_size=::WideCharToMultiByte(CP_UTF8,0,fileInfo.cFileName,-1,NULL,0,NULL,NULL);
 			leafname.reserve(allocate_size);
 			leafname.assign ( allocate_size , 0 );
@@ -882,3 +882,4 @@ std::string Host_IO::GetCasePreservedName( const std::string& inputPath )
 		 return ConstructPreservedPath( inputPath );
 	}
 }
+

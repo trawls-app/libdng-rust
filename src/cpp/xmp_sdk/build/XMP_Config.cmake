@@ -37,3 +37,4 @@ else (INCLUDE_CPP_DOM_SOURCE)
 endif(INCLUDE_CPP_DOM_SOURCE)
 
 include(${XMP_ROOT}/build/XMP_ConfigCommon.cmake)
+

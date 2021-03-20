@@ -16,30 +16,22 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        include:
-          - os: windows-latest
-            triplet: x64-windows-static
-            configuration: 'x64.*'
-          - os: ubuntu-latest
-            triplet: x64-linux
-            configuration: '.*Linux.*'
-          - os: macos-latest
-            triplet: x64-osx
-            configuration: '.*Linux.*'
-    env:
-      VCPKGRS_TRIPLET: ${{ matrix.triplet }}
-      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
-      RUSTFLAGS: -Ctarget-feature=+crt-static
     runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: 'recursive'
-    - name: Install cargo-Vcpkg
-      run: cargo install cargo-vcpkg
-    - name: Build vcpkg
-      run: cargo vcpkg build
+
+      # Restore from cache the previously built ports. If cache-miss, download and build vcpkg (aka "bootstrap vcpkg").
+    - name: Restore from cache and install vcpkg
+      # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
+      uses: lukka/run-vcpkg@v6
+      with:
+        setupOnly: true
+        vcpkgDirectory: '${{ github.workspace }}src/cpp/vcpkg'
+      # Now that vcpkg is installed, it is being used to run with the desired arguments.
+
     - name: Build
       run: cargo build --verbose --release
     - name: Run tests
