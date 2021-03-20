@@ -30,6 +30,6 @@ fn main() {
     }
     else
     {
-        println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x86-windows/lib", path);
+        println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-windows/lib", path);
     }
 }
