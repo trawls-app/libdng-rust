@@ -11,12 +11,3 @@ edition = "2018"
 [build-dependencies]
 cmake = "0.1.45"
 vcpkg = "0.2.11"
-cargo-vcpkg = "0.1.5"
-
-[package.metadata.vcpkg]
-git = "https://github.com/microsoft/vcpkg"
-rev = "e25b620"
-install = ["expat", "zlib"]
-
-[package.metadata.vcpkg.target]
-x86_64-pc-windows-msvc = { triplet = "x64-windows-static" }
