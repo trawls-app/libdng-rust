@@ -5,9 +5,14 @@ project(dngbindings)
 
 set(CMAKE_CXX_STANDARD 14)
 
+find_package(expat CONFIG REQUIRED)
+find_package(ZLIB REQUIRED)
+
+find_package(JPEG REQUIRED)
+
 ADD_SUBDIRECTORY(xmp_sdk)
 ADD_SUBDIRECTORY(dng_sdk)
 
 add_library(dngbindings dng.cpp)
-target_link_libraries(dngbindings STATIC dng-sdk)
+target_link_libraries(dngbindings PRIVATE dng-sdk)
 install(TARGETS dngbindings dng-sdk xmp-sdk)
