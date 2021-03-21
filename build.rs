@@ -6,7 +6,7 @@ use std::env;
 fn main() {
     let target  = env::var("TARGET").unwrap();
 
-    let dst = Config::new("src/cpp").build();
+    let dst = Config::new("src/cpp").static_crt(false).define("VCPKG_TARGET_TRIPLET", "x64-windows-static").build();
     let path = dst.display();
 
     println!("cargo:rustc-link-search=native={}/lib", path);
@@ -34,8 +34,8 @@ fn main() {
     }
     else
     {
-        println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-windows/lib", path);
-        println!("cargo:rustc-link-lib=static=libexpat");
+        println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-windows-static/lib", path);
+        println!("cargo:rustc-link-lib=static=libexpatMD");
         println!("cargo:rustc-link-lib=static=jpeg");
         println!("cargo:rustc-link-lib=static=zlib");
 
