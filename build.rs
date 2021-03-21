@@ -35,9 +35,9 @@ fn main() {
     else
     {
         println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-windows/lib", path);
-        println!("cargo:rustc-link-lib=static=libexpat");
-        println!("cargo:rustc-link-lib=static=jpeg");
-        println!("cargo:rustc-link-lib=static=zlib");
+        println!("cargo:rustc-link-lib=libexpat");
+        println!("cargo:rustc-link-lib=jpeg");
+        println!("cargo:rustc-link-lib=zlib");
 
     }
 }
