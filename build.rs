@@ -6,7 +6,12 @@ use std::env;
 fn main() {
     let target  = env::var("TARGET").unwrap();
 
-    let dst = Config::new("src/cpp").static_crt(false).define("VCPKG_TARGET_TRIPLET", "x64-windows-static").build();
+    let dst = if target.contains("apple") || target.contains("linux") {
+        Config::new("src/cpp").build()
+    } else {
+        Config::new("src/cpp").static_crt(false).define("VCPKG_TARGET_TRIPLET", "x64-windows-static").build()
+    };
+
     let path = dst.display();
 
     println!("cargo:rustc-link-search=native={}/lib", path);
@@ -21,7 +26,6 @@ fn main() {
         println!("cargo:rustc-link-lib=static=expat");
         println!("cargo:rustc-link-lib=static=jpeg");
         println!("cargo:rustc-link-lib=static=z");
-
     }
     else if target.contains("linux")
     {
@@ -30,7 +34,6 @@ fn main() {
         println!("cargo:rustc-link-lib=static=expat");
         println!("cargo:rustc-link-lib=static=jpeg");
         println!("cargo:rustc-link-lib=static=z");
-
     }
     else
     {
@@ -38,6 +41,5 @@ fn main() {
         println!("cargo:rustc-link-lib=static=libexpatMD");
         println!("cargo:rustc-link-lib=static=jpeg");
         println!("cargo:rustc-link-lib=static=zlib");
-
     }
 }
