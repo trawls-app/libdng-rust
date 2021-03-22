@@ -1,3 +1,11 @@
+extern "C" {
+    pub fn dummy();
+}
+
+pub fn call_dummy() {
+    unsafe { dummy(); }
+}
+
 #[cfg(test)]
 mod tests {
     extern {
