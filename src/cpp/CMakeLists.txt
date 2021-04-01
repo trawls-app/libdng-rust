@@ -13,6 +13,6 @@ find_package(JPEG REQUIRED)
 ADD_SUBDIRECTORY(xmp_sdk)
 ADD_SUBDIRECTORY(dng_sdk)
 
-add_library(dngbindings dng.cpp)
+add_library(dngbindings dng.cpp dng.h DNGHandler.cpp)
 target_link_libraries(dngbindings PRIVATE dng-sdk)
 install(TARGETS dngbindings dng-sdk xmp-sdk)
