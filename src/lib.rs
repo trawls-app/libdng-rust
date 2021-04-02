@@ -1,7 +1,6 @@
 use std::ffi::c_void;
 
 extern "C" {
-    fn dummy();
     fn getHandler() -> *const c_void;
     fn destroyHandler(handler: *const c_void);
     fn callHandlerDummy(handler: *const c_void);

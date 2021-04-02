@@ -5,14 +5,30 @@ project(dngbindings)
 
 set(CMAKE_CXX_STANDARD 14)
 
+find_package(Threads REQUIRED)
+
 find_package(expat CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
 
 find_package(JPEG REQUIRED)
+find_package(LibRaw REQUIRED)
+find_package(exiv2 CONFIG REQUIRED)
 
 ADD_SUBDIRECTORY(xmp_sdk)
 ADD_SUBDIRECTORY(dng_sdk)
 
-add_library(dngbindings dng.cpp dng.h DNGHandler.cpp)
-target_link_libraries(dngbindings PRIVATE dng-sdk)
+add_library(dngbindings
+        ${CMAKE_CURRENT_SOURCE_DIR}/dng.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/DNGHandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/dnghost.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/negativeProcessor.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/rawConverter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/DNGprocessor.cpp
+       # ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/ILCE7processor.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/FujiProcessor.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/variousVendorProcessor.cpp
+        )
+
+target_include_directories(dngbindings PUBLIC ${LIBRAW_INCLUDE_DIR} ${EXIV2_INCLUDE_DIR})
+target_link_libraries(dngbindings PRIVATE dng-sdk LibRaw exiv2lib)
 install(TARGETS dngbindings dng-sdk xmp-sdk)

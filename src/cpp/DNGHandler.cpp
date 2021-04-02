@@ -4,10 +4,15 @@
 
 #include "DNGHandler.h"
 
+#include "dng_xmp_sdk.h"
+
 #include <iostream>
 
 
 DNGHandler::DNGHandler() {
+    dng_xmp_sdk::InitializeSDK();
+
+    _host.Reset(dynamic_cast<dng_host*>(new dng_host()));
     _app_name = "test";
 }
 
