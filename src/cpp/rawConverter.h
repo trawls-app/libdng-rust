@@ -31,7 +31,7 @@
 
 class RawConverter {
 public:
-   RawConverter();
+   RawConverter(const char *app_name, const char *app_version);
    virtual ~RawConverter();
 
    void openRawFile(const std::string rawFilename);

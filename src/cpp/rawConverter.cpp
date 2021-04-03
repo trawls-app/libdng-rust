@@ -50,7 +50,7 @@ dng_file_stream* openFileStream(const std::string &outFilename) {
 }
 
 
-RawConverter::RawConverter() {
+RawConverter::RawConverter(const char *app_name, const char *app_version) {
     // -----------------------------------------------------------------------------------------
     // Init XMP SDK and some global variables we will need
 
@@ -61,8 +61,8 @@ RawConverter::RawConverter() {
     m_host->SetSaveLinearDNG(false);
     m_host->SetKeepOriginalFile(true);
 
-    m_appName.Set("dngbindings-rs");
-    m_appVersion.Set("0.0.1");
+    m_appName.Set(app_name);
+    m_appVersion.Set(app_version);
     CurrentDateTimeAndZone(m_dateTimeNow);
 }
 

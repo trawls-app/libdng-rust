@@ -4,25 +4,22 @@
 
 #include "DNGHandler.h"
 
-#include "dng_xmp_sdk.h"
-
 #include <iostream>
 
 
-DNGHandler::DNGHandler() {
-    dng_xmp_sdk::InitializeSDK();
+DNGHandler::DNGHandler(std::string app_name, std::string app_version) : _raw_converter(app_name.c_str(), app_version.c_str()) {
+    _app_name = app_name;
+    _app_version = app_version;
 
-    _host.Reset(dynamic_cast<dng_host*>(new dng_host()));
-    _app_name = "test";
+    std::cout << "DNGHandler::DNGHandler(): " << _app_name << " " << _app_version << std::endl;
 }
 
 void DNGHandler::dummy() {
     std::cout << "DNGHandler::dummy()" << std::endl;
-    std::cout << "App Name: " << _app_name << std::endl;
 }
 
 DNGHandler::~DNGHandler() {
-    std::cout << "DNGHandler::~DNGHandler()" << std::endl;
+    std::cout << "DNGHandler::~DNGHandler(): " << _app_name << " " << _app_version << std::endl;
 }
 
 

@@ -2,14 +2,9 @@
 
 #include <iostream>
 
-extern "C" void dummy() {
-  std::cout << "Called dummy from static C++ code" << std::endl;
-  callHandlerDummy(getHandler());
-}
 
-
-DNGHandler * getHandler() {
-    return new DNGHandler();
+DNGHandler *createHandler(const char *app_name, const char *app_version) {
+    return new DNGHandler(app_name, app_version);
 }
 
 void destroyHandler(DNGHandler *handler) {

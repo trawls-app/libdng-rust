@@ -5,20 +5,19 @@
 #ifndef DNGBINDINGS_DNGHANDLER_H
 #define DNGBINDINGS_DNGHANDLER_H
 
-#include <dng_host.h>
-#include <dng_negative.h>
+#include "rawConverter.h"
 
 #include <string>
 
 class DNGHandler {
 public:
-    DNGHandler();
+    DNGHandler(std::string app_name, std::string app_version);
     ~DNGHandler();
     void dummy();
 
 protected:
-    std::string _app_name;
-    AutoPtr<dng_host> _host;
+    RawConverter _raw_converter;
+    std::string _app_name, _app_version;
 };
 
 
