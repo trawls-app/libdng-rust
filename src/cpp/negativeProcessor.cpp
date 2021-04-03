@@ -99,17 +99,17 @@ NegativeProcessor* NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, c
     // -----------------------------------------------------------------------------------------
     // Identify and create correct processor class
 
-    if (rawProcessor->imgdata.idata.dng_version != 0) {
-        try {return new DNGprocessor(host, rawProcessor.Release(), rawImage);}
-        catch (dng_exception &e) {
-            std::stringstream error; error << "Cannot parse source DNG-file (" << e.ErrorCode() << ": " << getDngErrorMessage(e.ErrorCode()) << ")";
-            throw std::runtime_error(error.str());
-        }
-    }
+//    if (rawProcessor->imgdata.idata.dng_version != 0) {
+//        try {return new DNGprocessor(host, rawProcessor.Release(), rawImage);}
+//        catch (dng_exception &e) {
+//            std::stringstream error; error << "Cannot parse source DNG-file (" << e.ErrorCode() << ": " << getDngErrorMessage(e.ErrorCode()) << ")";
+//            throw std::runtime_error(error.str());
+//        }
+//    }
 //    else if (!strcmp(rawProcessor->imgdata.idata.model, "ILCE-7"))
 //        return new ILCE7processor(host, rawProcessor.Release(), rawImage);
-    else if (!strcmp(rawProcessor->imgdata.idata.make, "FUJIFILM"))
-        return new FujiProcessor(host, rawProcessor.Release(), rawImage);
+//    else if (!strcmp(rawProcessor->imgdata.idata.make, "FUJIFILM"))
+//        return new FujiProcessor(host, rawProcessor.Release(), rawImage);
 
     return new VariousVendorProcessor(host, rawProcessor.Release(), rawImage);
 }
@@ -176,6 +176,7 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
         case 6:  m_negative->SetBaseOrientation(dng_orientation::Rotate90CW()); break;
         default: m_negative->SetBaseOrientation(dng_orientation::Normal()); break;
     }
+    m_negative->SetBaseOrientation(dng_orientation::Normal());
 
 	// -----------------------------------------------------------------------------------------
 	// ColorKeys (this needs to happen before Mosaic - how about documenting that in the SDK???)
