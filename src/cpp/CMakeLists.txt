@@ -30,5 +30,5 @@ add_library(dngbindings
         )
 
 target_include_directories(dngbindings PUBLIC ${LIBRAW_INCLUDE_DIR} ${EXIV2_INCLUDE_DIR})
-target_link_libraries(dngbindings PRIVATE dng-sdk LibRaw exiv2lib)
+target_link_libraries(dngbindings PRIVATE dng-sdk STATIC LibRaw exiv2lib)
 install(TARGETS dngbindings dng-sdk xmp-sdk)
