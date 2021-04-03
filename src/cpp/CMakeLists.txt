@@ -12,7 +12,7 @@ find_package(ZLIB REQUIRED)
 
 find_package(JPEG REQUIRED)
 find_package(LibRaw REQUIRED)
-find_package(exiv2 CONFIG REQUIRED)
+find_package(exiv2 REQUIRED)
 
 ADD_SUBDIRECTORY(xmp_sdk)
 ADD_SUBDIRECTORY(dng_sdk)
