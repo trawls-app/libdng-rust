@@ -34,6 +34,7 @@ fn main() {
         println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-linux/lib", path);
         println!("cargo:rustc-link-lib=static=expat");
         println!("cargo:rustc-link-lib=static=z");
+        println!("cargo:rustc-link-lib=static=glut");
     }
     else
     {
@@ -45,6 +46,5 @@ fn main() {
     println!("cargo:rustc-link-lib=static=jpeg");
     println!("cargo:rustc-link-lib=static=raw");
     println!("cargo:rustc-link-lib=static=exiv2");
-    println!("cargo:rustc-link-lib=static=glut");
     println!("cargo:rustc-link-lib=static=jasper");
 }
