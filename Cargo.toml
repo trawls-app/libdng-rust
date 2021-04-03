@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 version = "3.0.0"
+rexiv2 = "0.9.1"
 
 [build-dependencies]
 cmake = "0.1.45"
