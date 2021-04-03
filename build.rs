@@ -24,6 +24,7 @@ fn main() {
         println!("cargo:rustc-link-lib=framework=CoreFoundation");
         println!("cargo:rustc-link-lib=framework=CoreServices");
         println!("cargo:rustc-link-lib=dylib=c++");
+        println!("cargo:rustc-link-lib=dylib=iconv");
         println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-osx/lib", path);
         println!("cargo:rustc-link-lib=static=expat");
         println!("cargo:rustc-link-lib=static=z");
