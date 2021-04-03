@@ -26,7 +26,6 @@ fn main() {
         println!("cargo:rustc-link-lib=dylib=c++");
         println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-osx/lib", path);
         println!("cargo:rustc-link-lib=static=expat");
-        println!("cargo:rustc-link-lib=static=jpeg");
         println!("cargo:rustc-link-lib=static=z");
     }
     else if target.contains("linux")
@@ -34,14 +33,18 @@ fn main() {
         println!("cargo:rustc-link-lib=dylib=stdc++");
         println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-linux/lib", path);
         println!("cargo:rustc-link-lib=static=expat");
-        println!("cargo:rustc-link-lib=static=jpeg");
         println!("cargo:rustc-link-lib=static=z");
     }
     else
     {
         println!("cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-windows-static/lib", path);
         println!("cargo:rustc-link-lib=static=libexpatMD");
-        println!("cargo:rustc-link-lib=static=jpeg");
         println!("cargo:rustc-link-lib=static=zlib");
     }
+
+    println!("cargo:rustc-link-lib=static=jpeg");
+    println!("cargo:rustc-link-lib=static=raw");
+    println!("cargo:rustc-link-lib=static=exiv2");
+    println!("cargo:rustc-link-lib=static=glut");
+    println!("cargo:rustc-link-lib=static=jasper");
 }
