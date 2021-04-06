@@ -5,6 +5,9 @@ project(dngbindings)
 
 set(CMAKE_CXX_STANDARD 14)
 
+IF(MSVC)
+    SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+ENDIF(MSVC)
 
 find_package(expat CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
