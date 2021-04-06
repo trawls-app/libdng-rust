@@ -39,8 +39,8 @@
 
 /*#include <exiv2/error.hpp>
 #include <exiv2/image.hpp>
-#include <exiv2/xmp_exiv2.hpp>*/
-#include <libraw/libraw.h>
+#include <exiv2/xmp_exiv2.hpp>
+#include <libraw/libraw.h>*/
 
 const char* getDngErrorMessage(int errorCode) {
     switch (errorCode) {
@@ -63,11 +63,13 @@ const char* getDngErrorMessage(int errorCode) {
 }
 
 
-NegativeProcessor* NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, const char *filename) {
+NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, const char *filename,
+                                                       unsigned short int width,
+                                                       unsigned short int height) {
     // -----------------------------------------------------------------------------------------
     // Open and parse rawfile with libraw...
 
-    AutoPtr<LibRaw> rawProcessor(new LibRaw());
+    /*AutoPtr<LibRaw> rawProcessor(new LibRaw());
 
     int ret = rawProcessor->open_file(filename);
     if (ret != LIBRAW_SUCCESS) {
@@ -81,7 +83,7 @@ NegativeProcessor* NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, c
         rawProcessor->recycle();
         std::stringstream error; error << "LibRaw-error while unpacking rawFile: " << libraw_strerror(ret);
         throw std::runtime_error(error.str());
-    }
+    }*/
 
     // -----------------------------------------------------------------------------------------
     // ...and libexiv2
@@ -111,19 +113,18 @@ NegativeProcessor* NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, c
 //    else if (!strcmp(rawProcessor->imgdata.idata.make, "FUJIFILM"))
 //        return new FujiProcessor(host, rawProcessor.Release(), rawImage);
 
-    return new VariousVendorProcessor(host, rawProcessor.Release());
+    return new VariousVendorProcessor(host, width, height);
 }
 
 
-NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor)
-                                   : m_RawProcessor(rawProcessor),
-                                     m_host(host) {
+NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, unsigned short int width, unsigned short int height)
+                                   : m_host(host), image_width(width), image_height(height) {
     m_negative.Reset(m_host->Make_dng_negative());
 }
 
 
 NegativeProcessor::~NegativeProcessor() {
-	m_RawProcessor->recycle();
+	//m_RawProcessor->recycle();
 }
 
 
@@ -143,8 +144,8 @@ ColorKeyCode colorKey(const char color) {
 
 
 void NegativeProcessor::setDNGPropertiesFromRaw() {
-    libraw_image_sizes_t *sizes   = &m_RawProcessor->imgdata.sizes;
-    libraw_iparams_t     *iparams = &m_RawProcessor->imgdata.idata;
+    //libraw_image_sizes_t *sizes   = &m_RawProcessor->imgdata.sizes;
+    //libraw_iparams_t     *iparams = &m_RawProcessor->imgdata.idata;
 
     // -----------------------------------------------------------------------------------------
     // Raw filename
@@ -158,15 +159,15 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
 	// Model
 
     dng_string makeModel;
-    makeModel.Append(iparams->make);
-    makeModel.Append(" ");
-    makeModel.Append(iparams->model);
+    //makeModel.Append(iparams->make);
+    makeModel.Append(" Dummy ");
+    //makeModel.Append(iparams->model);
     m_negative->SetModelName(makeModel.Get());
 
     // -----------------------------------------------------------------------------------------
     // Orientation 
 
-    switch (sizes->flip) {
+    /*switch (sizes->flip) {
         case 180:
         case 3:  m_negative->SetBaseOrientation(dng_orientation::Rotate180()); break;
         case 270:
@@ -174,44 +175,49 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
         case 90:
         case 6:  m_negative->SetBaseOrientation(dng_orientation::Rotate90CW()); break;
         default: m_negative->SetBaseOrientation(dng_orientation::Normal()); break;
-    }
+    }*/
     m_negative->SetBaseOrientation(dng_orientation::Normal());
 
 	// -----------------------------------------------------------------------------------------
 	// ColorKeys (this needs to happen before Mosaic - how about documenting that in the SDK???)
 
-    m_negative->SetColorChannels(iparams->colors);
+    m_negative->SetColorChannels(3);
+    m_negative->SetColorKeys(colorKeyRed, colorKeyGreen, colorKeyGreen, colorKeyBlue);
+    /*m_negative->SetColorChannels(iparams->colors);
     m_negative->SetColorKeys(colorKey(iparams->cdesc[0]), colorKey(iparams->cdesc[1]), 
-                             colorKey(iparams->cdesc[2]), colorKey(iparams->cdesc[3]));
+                             colorKey(iparams->cdesc[2]), colorKey(iparams->cdesc[3]));*/
 
     // -----------------------------------------------------------------------------------------
     // Mosaic
 
-    if (iparams->colors == 4) m_negative->SetQuadMosaic(iparams->filters);
+    m_negative->SetBayerMosaic(0);
+    /*if (iparams->colors == 4) m_negative->SetQuadMosaic(iparams->filters);
     else switch(iparams->filters) {
             case 0xe1e1e1e1:  m_negative->SetBayerMosaic(0); break;
             case 0xb4b4b4b4:  m_negative->SetBayerMosaic(1); break;
             case 0x1e1e1e1e:  m_negative->SetBayerMosaic(2); break;
             case 0x4b4b4b4b:  m_negative->SetBayerMosaic(3); break;
             default: break;  // not throwing error, because this might be set in a sub-class (e.g., Fuji)
-        }
+        }*/
 
 	// -----------------------------------------------------------------------------------------
 	// Default scale and crop/active area
 
-    m_negative->SetDefaultScale(dng_urational(sizes->iwidth, sizes->width), dng_urational(sizes->iheight, sizes->height));
+/*    m_negative->SetDefaultScale(dng_urational(sizes->iwidth, image_width), dng_urational(sizes->iheight, image_height));
     m_negative->SetActiveArea(dng_rect(sizes->top_margin, sizes->left_margin,
-                                       sizes->top_margin + sizes->height, sizes->left_margin + sizes->width));
+                                       sizes->top_margin + image_height, sizes->left_margin + image_width));*/
+    m_negative->SetDefaultScale(dng_urational(image_width, image_width), dng_urational(image_height, image_height));
+    m_negative->SetActiveArea(dng_rect(0, 0, image_height, image_width));
 
     uint32 cropWidth, cropHeight;
     if (!getRawExifTag("Exif.Photo.PixelXDimension", 0, &cropWidth) ||
         !getRawExifTag("Exif.Photo.PixelYDimension", 0, &cropHeight)) {
-        cropWidth = sizes->width - 16;
-        cropHeight = sizes->height - 16;
+        cropWidth = image_width - 16;
+        cropHeight = image_height - 16;
     }
 
-    int cropLeftMargin = (cropWidth > sizes->width ) ? 0 : (sizes->width  - cropWidth) / 2;
-    int cropTopMargin = (cropHeight > sizes->height) ? 0 : (sizes->height - cropHeight) / 2;
+    int cropLeftMargin = (cropWidth > image_width ) ? 0 : (image_width  - cropWidth) / 2;
+    int cropTopMargin = (cropHeight > image_height) ? 0 : (image_height - cropHeight) / 2;
 
     m_negative->SetDefaultCropOrigin(cropLeftMargin, cropTopMargin);
     m_negative->SetDefaultCropSize(cropWidth, cropHeight);
@@ -221,26 +227,30 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
 
     //FIXME: what does this actually do?
     //FIXME: some pictures have 0 in cam_mul leading to NaNs; corrected here with 0-override but is that correct?
-    dng_vector cameraNeutral(iparams->colors);
+    dng_vector cameraNeutral(3);
+    /*dng_vector cameraNeutral(iparams->colors);
     for (int i = 0; i < iparams->colors; i++)
-        cameraNeutral[i] = m_RawProcessor->imgdata.color.cam_mul[i] == 0 ? 0.0 : 1.0 / m_RawProcessor->imgdata.color.cam_mul[i];
+        cameraNeutral[i] = m_RawProcessor->imgdata.color.cam_mul[i] == 0 ? 0.0 : 1.0 / m_RawProcessor->imgdata.color.cam_mul[i];*/
     m_negative->SetCameraNeutral(cameraNeutral);
 
     // -----------------------------------------------------------------------------------------
     // BlackLevel & WhiteLevel
 
-    libraw_colordata_t *colors  = &m_RawProcessor->imgdata.color;
+    //libraw_colordata_t *colors  = &m_RawProcessor->imgdata.color;
 
     for (int i = 0; i < 4; i++)
-	    m_negative->SetWhiteLevel(static_cast<uint32>(colors->maximum), i);
+	    //m_negative->SetWhiteLevel(static_cast<uint32>(colors->maximum), i);
+        m_negative->SetWhiteLevel(static_cast<uint32>(255), i);
 
+    m_negative->SetBlackLevel(0, 0);
+    /*
     if ((m_negative->GetMosaicInfo() != NULL) && (m_negative->GetMosaicInfo()->fCFAPatternSize == dng_point(2, 2)))
         m_negative->SetQuadBlacks(colors->black + colors->cblack[0],
                                   colors->black + colors->cblack[1],
                                   colors->black + colors->cblack[2],
                                   colors->black + colors->cblack[3]);
     else 
-    	m_negative->SetBlackLevel(colors->black + colors->cblack[0], 0);
+    	m_negative->SetBlackLevel(colors->black + colors->cblack[0], 0);*/
 
     // -----------------------------------------------------------------------------------------
     // Fixed properties
@@ -270,14 +280,18 @@ void NegativeProcessor::setCameraProfile(const char *dcpFilename) {
         // Build our own minimal profile, based on one colour matrix provided by LibRaw
 
         dng_string profName;
-        profName.Append(m_RawProcessor->imgdata.idata.make);
-        profName.Append(" ");
-        profName.Append(m_RawProcessor->imgdata.idata.model);
+        //profName.Append(m_RawProcessor->imgdata.idata.make);
+        profName.Append(" Dummy ");
+        //profName.Append(m_RawProcessor->imgdata.idata.model);
 
         prof->SetName(profName.Get());
         prof->SetCalibrationIlluminant1(lsD65);
 
-        int colors = m_RawProcessor->imgdata.idata.colors;
+        //int colors = m_RawProcessor->imgdata.idata.colors;
+        auto colormatrix1 = new dng_matrix_3by3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+        prof->SetColorMatrix1(*colormatrix1);
+
+        /*
         if ((colors == 3) || (colors = 4)) {
 	        dng_matrix *colormatrix1 = new dng_matrix(colors, 3);
 
@@ -294,7 +308,7 @@ void NegativeProcessor::setCameraProfile(const char *dcpFilename) {
                 	colormatrix1 = new dng_matrix_4by3(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
             }
             prof->SetColorMatrix1(*colormatrix1);
-        }
+        }*/
         prof->SetProfileCalibrationSignature("com.fimagena.raw2dng");
     }
 
@@ -577,44 +591,25 @@ dng_memory_stream* NegativeProcessor::createDNGPrivateTag() {
 }
 
 
-void NegativeProcessor::buildDNGImage() {
-    libraw_image_sizes_t *sizes = &m_RawProcessor->imgdata.sizes;
+void NegativeProcessor::buildDNGImage(unsigned short *rawBuffer) {
+    //libraw_image_sizes_t *sizes = &m_RawProcessor->imgdata.sizes;
 
     // -----------------------------------------------------------------------------------------
     // Select right data source from LibRaw
 
-    unsigned short *rawBuffer = (unsigned short*) m_RawProcessor->imgdata.rawdata.raw_image;
-    uint32 inputPlanes = 1;
-
-    if (rawBuffer == NULL) {
-        rawBuffer = (unsigned short*) m_RawProcessor->imgdata.rawdata.color3_image;
-        inputPlanes = 3;
-    }
-    if (rawBuffer == NULL) {
-        rawBuffer = (unsigned short*) m_RawProcessor->imgdata.rawdata.color4_image;
-        inputPlanes = 4;
-    }
-
-    uint32 outputPlanes = (inputPlanes == 1) ? 1 : m_RawProcessor->imgdata.idata.colors;
+    uint32 outputPlanes = 1;
 
     // -----------------------------------------------------------------------------------------
     // Create new dng_image and copy data
 
-    dng_rect bounds = dng_rect(sizes->raw_height, sizes->raw_width);
+    //dng_rect bounds = dng_rect(sizes->raw_height, sizes->raw_width);
+    dng_rect bounds = dng_rect(image_height, image_width);
     dng_simple_image *image = new dng_simple_image(bounds, outputPlanes, ttShort, m_host->Allocator());
 
     dng_pixel_buffer buffer; image->GetPixelBuffer(buffer);
     unsigned short *imageBuffer = (unsigned short*)buffer.fData;
 
-    if (inputPlanes == outputPlanes)
-        memcpy(imageBuffer, rawBuffer, sizes->raw_height * sizes->raw_width * outputPlanes * sizeof(unsigned short));
-    else {
-        for (int i = 0; i < (sizes->raw_height * sizes->raw_width); i++) {
-            memcpy(imageBuffer, rawBuffer, outputPlanes * sizeof(unsigned short));
-            imageBuffer += outputPlanes;
-            rawBuffer += inputPlanes;
-        }
-    }
+    memcpy(imageBuffer, rawBuffer, image_height * image_width * outputPlanes * sizeof(unsigned short));
 
     AutoPtr<dng_image> castImage(dynamic_cast<dng_image*>(image));
     m_negative->SetStage1Image(castImage);

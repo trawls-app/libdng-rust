@@ -30,7 +30,7 @@ public:
    void setExifFromRaw(const dng_date_time_info &dateTimeNow, const dng_string &appNameVersion);
    void setXmpFromRaw(const dng_date_time_info &dateTimeNow, const dng_string &appNameVersion);
    void backupProprietaryData();
-   void buildDNGImage();
+   void buildDNGImage(unsigned short *rawBuffer);
 
 protected:
    DNGprocessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor, Exiv2::Image::AutoPtr &rawImage);

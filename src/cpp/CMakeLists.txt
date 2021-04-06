@@ -11,8 +11,6 @@ find_package(expat CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
 
 find_package(JPEG REQUIRED)
-find_package(LibRaw REQUIRED)
-find_package(exiv2 CONFIG REQUIRED)
 
 ADD_SUBDIRECTORY(xmp_sdk)
 ADD_SUBDIRECTORY(dng_sdk)
@@ -29,6 +27,5 @@ add_library(dngbindings
         ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/variousVendorProcessor.cpp
         )
 
-target_include_directories(dngbindings PUBLIC ${LIBRAW_INCLUDE_DIR} ${EXIV2_INCLUDE_DIR})
-target_link_libraries(dngbindings PRIVATE dng-sdk LibRaw exiv2lib)
+target_link_libraries(dngbindings PRIVATE dng-sdk)
 install(TARGETS dngbindings dng-sdk xmp-sdk)

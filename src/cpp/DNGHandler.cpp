@@ -7,7 +7,8 @@
 #include <iostream>
 
 
-DNGHandler::DNGHandler(std::string app_name, std::string app_version) : _raw_converter(app_name.c_str(), app_version.c_str()) {
+DNGHandler::DNGHandler(std::string app_name, std::string app_version) : _raw_converter(app_name.c_str(),
+                                                                                       app_version.c_str(), 0, 0) {
     _app_name = app_name;
     _app_version = app_version;
 

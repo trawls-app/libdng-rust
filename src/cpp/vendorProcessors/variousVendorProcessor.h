@@ -29,5 +29,5 @@ public:
    void setExifFromRaw(const dng_date_time_info &dateTimeNow, const dng_string &appNameVersion);
 
 protected:
-   VariousVendorProcessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor);
+   VariousVendorProcessor(AutoPtr<dng_host> &host, unsigned short int width, unsigned short int height);
 };

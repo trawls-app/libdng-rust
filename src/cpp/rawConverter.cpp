@@ -50,9 +50,13 @@ dng_file_stream* openFileStream(const std::string &outFilename) {
 }
 
 
-RawConverter::RawConverter(const char *app_name, const char *app_version) {
+RawConverter::RawConverter(const char *app_name, const char *app_version, unsigned short int width,
+                           unsigned short int height) {
     // -----------------------------------------------------------------------------------------
     // Init XMP SDK and some global variables we will need
+
+    image_width = width;
+    image_height = height;
 
     dng_xmp_sdk::InitializeSDK();
 
@@ -83,7 +87,7 @@ void RawConverter::openRawFile(const std::string rawFilename) {
 
     if (m_publishFunction != NULL) m_publishFunction("parsing raw file");
 
-    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, rawFilename.c_str()));
+    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, rawFilename.c_str(), image_width, image_height));
 }
 
 
@@ -109,7 +113,7 @@ void RawConverter::buildNegative(const std::string dcpFilename) {
 
     if (m_publishFunction != NULL) m_publishFunction("reading raw image data");
 
-    m_negProcessor->buildDNGImage();
+    m_negProcessor->buildDNGImage(nullptr);
 }
 
 

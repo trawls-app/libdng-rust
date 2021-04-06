@@ -110,7 +110,7 @@ void DNGprocessor::backupProprietaryData() {
 }
 
 
-void DNGprocessor::buildDNGImage() {
+void DNGprocessor::buildDNGImage(unsigned short *rawBuffer) {
     // -----------------------------------------------------------------------------------------
     // No-op, since we've already read the stage 1 image
 }

@@ -31,7 +31,7 @@
 
 class RawConverter {
 public:
-   RawConverter(const char *app_name, const char *app_version);
+   RawConverter(const char *app_name, const char *app_version, unsigned short int width, unsigned short int height);
    virtual ~RawConverter();
 
    void openRawFile(const std::string rawFilename);
@@ -53,6 +53,8 @@ private:
 
    dng_string m_appName, m_appVersion;
    dng_date_time_info m_dateTimeNow;
+
+   unsigned short int image_width, image_height;
 
    static std::function<void(const char*)> m_publishFunction;
 };

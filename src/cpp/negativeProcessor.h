@@ -24,13 +24,14 @@
 #include <dng_exif.h>
 // #include <exiv2/image.hpp>
 
-class LibRaw;
+//class LibRaw;
 
 const char* getDngErrorMessage(int errorCode);
 
 class NegativeProcessor {
 public:
-   static NegativeProcessor* createProcessor(AutoPtr<dng_host> &host, const char *filename);
+   static NegativeProcessor *createProcessor(AutoPtr<dng_host> &host, const char *filename, unsigned short int width,
+                                             unsigned short int height);
    virtual ~NegativeProcessor();
 
    dng_negative* getNegative() {return m_negative.Get();}
@@ -41,11 +42,11 @@ public:
    virtual void setExifFromRaw(const dng_date_time_info &dateTimeNow, const dng_string &appNameVersion);
    virtual void setXmpFromRaw(const dng_date_time_info &dateTimeNow, const dng_string &appNameVersion);
    virtual void backupProprietaryData();
-   virtual void buildDNGImage();
+   virtual void buildDNGImage(unsigned short *rawBuffer);
    virtual void embedOriginalRaw(const char *rawFilename);
 
 protected:
-   NegativeProcessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor);
+   NegativeProcessor(AutoPtr<dng_host> &host, unsigned short int width, unsigned short int height);
 
    virtual dng_memory_stream* createDNGPrivateTag();
 
@@ -64,8 +65,10 @@ protected:
 
    bool getRawExifTag(const char* exifTagName, long* size, unsigned char** data);
 
+   unsigned short int image_width, image_height;
+
    // Source: Raw-file
-   AutoPtr<LibRaw> m_RawProcessor;
+   //AutoPtr<LibRaw> m_RawProcessor;
    //Exiv2::Image::AutoPtr m_RawImage;
    //Exiv2::ExifData m_RawExif;
    //Exiv2::XmpData m_RawXmp;

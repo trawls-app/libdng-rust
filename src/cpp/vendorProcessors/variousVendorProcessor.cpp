@@ -23,14 +23,15 @@
 #include <dng_rational.h>
 #include <dng_string.h>
 
-#include <libraw/libraw.h>
-#include <exiv2/exif.hpp>
+// #include <libraw/libraw.h>
+// #include <exiv2/exif.hpp>
 
 #include "variousVendorProcessor.h"
 
 
-VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor)
-                                             : NegativeProcessor(host, rawProcessor) {}
+VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, unsigned short int width,
+                                               unsigned short int height)
+                                             : NegativeProcessor(host, width, height) {}
 
 
 void setString(uint32 inInt, dng_string *outString) {
@@ -92,12 +93,12 @@ void VariousVendorProcessor::setDNGPropertiesFromRaw() {
     // Set crop --------------------------------------------------------------------------------
     // this looks complicated but just checks that we're in bounds before setting crop 
     if ((cropWidth != 1 >> 30) && (cropHeight != 1>> 30)) {
-        if ((leftMargin == 1 >>30) && (cropWidth <= m_RawProcessor->imgdata.sizes.width))
-            leftMargin = (m_RawProcessor->imgdata.sizes.width - cropWidth) / 2;
-        if ((topMargin == 1 >> 30) && (cropHeight <= m_RawProcessor->imgdata.sizes.height))
-            topMargin = (m_RawProcessor->imgdata.sizes.height - cropHeight) / 2;
-        if (((leftMargin + cropWidth) <= m_RawProcessor->imgdata.sizes.width) &&
-            ((topMargin + cropHeight) <= m_RawProcessor->imgdata.sizes.height)) {
+        if ((leftMargin == 1 >>30) && (cropWidth <= image_width))
+            leftMargin = (image_width - cropWidth) / 2;
+        if ((topMargin == 1 >> 30) && (cropHeight <= image_height))
+            topMargin = (image_height - cropHeight) / 2;
+        if (((leftMargin + cropWidth) <= image_width) &&
+            ((topMargin + cropHeight) <= image_height)) {
             m_negative->SetDefaultCropOrigin(leftMargin, topMargin);
             m_negative->SetDefaultCropSize(cropWidth, cropHeight);
         }
