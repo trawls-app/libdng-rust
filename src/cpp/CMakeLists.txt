@@ -5,7 +5,6 @@ project(dngbindings)
 
 set(CMAKE_CXX_STANDARD 14)
 
-find_package(Threads REQUIRED)
 
 find_package(expat CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
