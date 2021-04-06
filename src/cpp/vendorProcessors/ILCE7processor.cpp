@@ -162,7 +162,7 @@ public:
 
 
 ILCE7processor::ILCE7processor(AutoPtr<dng_host> &host, LibRaw *rawProcessor, Exiv2::Image::AutoPtr &rawImage)
-                             : NegativeProcessor(host, rawProcessor, rawImage) {}
+                             : NegativeProcessor(host, rawProcessor) {}
 
 
 void ILCE7processor::setDNGPropertiesFromRaw() {

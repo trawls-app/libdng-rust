@@ -18,10 +18,11 @@
 
 #pragma once
 
+#include <sstream>
 #include <dng_host.h>
 #include <dng_negative.h>
 #include <dng_exif.h>
-#include <exiv2/image.hpp>
+// #include <exiv2/image.hpp>
 
 class LibRaw;
 
@@ -44,7 +45,7 @@ public:
    virtual void embedOriginalRaw(const char *rawFilename);
 
 protected:
-   NegativeProcessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor, Exiv2::Image::AutoPtr &rawImage);
+   NegativeProcessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor);
 
    virtual dng_memory_stream* createDNGPrivateTag();
 
@@ -65,9 +66,9 @@ protected:
 
    // Source: Raw-file
    AutoPtr<LibRaw> m_RawProcessor;
-   Exiv2::Image::AutoPtr m_RawImage;
-   Exiv2::ExifData m_RawExif;
-   Exiv2::XmpData m_RawXmp;
+   //Exiv2::Image::AutoPtr m_RawImage;
+   //Exiv2::ExifData m_RawExif;
+   //Exiv2::XmpData m_RawXmp;
 
    // Target: DNG-file
    AutoPtr<dng_host> &m_host;

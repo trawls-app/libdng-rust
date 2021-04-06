@@ -23,7 +23,7 @@ add_library(dngbindings
         ${CMAKE_CURRENT_SOURCE_DIR}/dnghost.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/negativeProcessor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rawConverter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/DNGprocessor.cpp
+       # ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/DNGprocessor.cpp
        # ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/ILCE7processor.cpp
        # ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/FujiProcessor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/variousVendorProcessor.cpp

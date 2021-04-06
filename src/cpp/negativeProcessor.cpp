@@ -21,9 +21,9 @@
 */
 
 #include "negativeProcessor.h"
-#include "vendorProcessors/DNGprocessor.h"
+// #include "vendorProcessors/DNGprocessor.h"
 // #include "vendorProcessors/ILCE7processor.h"
-#include "vendorProcessors/FujiProcessor.h"
+// #include "vendorProcessors/FujiProcessor.h"
 #include "vendorProcessors/variousVendorProcessor.h"
 
 #include <stdexcept>
@@ -37,9 +37,9 @@
 
 #include <zlib.h>
 
-#include <exiv2/error.hpp>
+/*#include <exiv2/error.hpp>
 #include <exiv2/image.hpp>
-#include <exiv2/xmp_exiv2.hpp>
+#include <exiv2/xmp_exiv2.hpp>*/
 #include <libraw/libraw.h>
 
 const char* getDngErrorMessage(int errorCode) {
@@ -86,7 +86,7 @@ NegativeProcessor* NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, c
     // -----------------------------------------------------------------------------------------
     // ...and libexiv2
 
-    Exiv2::Image::AutoPtr rawImage;
+    /*Exiv2::Image::AutoPtr rawImage;
     try {
         rawImage = Exiv2::ImageFactory::open(filename);
         rawImage->readMetadata();
@@ -94,7 +94,7 @@ NegativeProcessor* NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, c
     catch (Exiv2::Error& e) {
         std::stringstream error; error << "Exiv2-error while opening/parsing rawFile (code " << e.code() << "): " << e.what();
         throw std::runtime_error(error.str());
-    }
+    }*/
 
     // -----------------------------------------------------------------------------------------
     // Identify and create correct processor class
@@ -111,13 +111,12 @@ NegativeProcessor* NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, c
 //    else if (!strcmp(rawProcessor->imgdata.idata.make, "FUJIFILM"))
 //        return new FujiProcessor(host, rawProcessor.Release(), rawImage);
 
-    return new VariousVendorProcessor(host, rawProcessor.Release(), rawImage);
+    return new VariousVendorProcessor(host, rawProcessor.Release());
 }
 
 
-NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor, Exiv2::Image::AutoPtr &rawImage)
-                                   : m_RawProcessor(rawProcessor), m_RawImage(rawImage),
-                                     m_RawExif(m_RawImage->exifData()), m_RawXmp(m_RawImage->xmpData()),
+NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor)
+                                   : m_RawProcessor(rawProcessor),
                                      m_host(host) {
     m_negative.Reset(m_host->Make_dng_negative());
 }
@@ -150,10 +149,10 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
     // -----------------------------------------------------------------------------------------
     // Raw filename
 
-    std::string file(m_RawImage->io().path());
+    /*std::string file("");
     size_t found = std::min(file.rfind("\\"), file.rfind("/"));
     if (found != std::string::npos) file = file.substr(found + 1, file.length() - found - 1);
-    m_negative->SetOriginalRawFileName(file.c_str());
+    m_negative->SetOriginalRawFileName(file.c_str());*/
 
 	// -----------------------------------------------------------------------------------------
 	// Model
@@ -505,7 +504,7 @@ void NegativeProcessor::setXmpFromRaw(const dng_date_time_info &dateTimeNow, con
     // Copy existing XMP-tags in raw-file to DNG
 
     AutoPtr<dng_xmp> negXmp(new dng_xmp(m_host->Allocator()));
-    for (Exiv2::XmpData::const_iterator it = m_RawXmp.begin(); it != m_RawXmp.end(); it++) {
+    /*for (Exiv2::XmpData::const_iterator it = m_RawXmp.begin(); it != m_RawXmp.end(); it++) {
         try {
             negXmp->Set(Exiv2::XmpProperties::nsInfo(it->groupName())->ns_, it->tagName().c_str(), it->toString().c_str());
         }
@@ -517,7 +516,7 @@ void NegativeProcessor::setXmpFromRaw(const dng_date_time_info &dateTimeNow, con
                          "path: " << it->tagName().c_str() << ", "
                          "text: " << it->toString().c_str() << "\n";
         }
-    }
+    }*/
 
     // -----------------------------------------------------------------------------------------
     // Set some base-XMP tags (incl. redundant creation date under Photoshop namespace - just to stay close to Adobe...)
@@ -707,7 +706,7 @@ void NegativeProcessor::embedOriginalRaw(const char *rawFilename) {
 // Protected helper functions
 
 bool NegativeProcessor::getInterpretedRawExifTag(const char* exifTagName, int32 component, uint32* value) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if (it == m_RawExif.end()) return false;
 
     std::stringstream interpretedValue; it->write(interpretedValue, &m_RawExif);
@@ -717,73 +716,81 @@ bool NegativeProcessor::getInterpretedRawExifTag(const char* exifTagName, int32 
     if (interpretedValue.fail()) return false;
 
     *value = tmp;
-    return true;
+    return true;*/
+    return false;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, dng_string* value) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if (it == m_RawExif.end()) return false;
 
     value->Set_ASCII((it->print(&m_RawExif)).c_str()); value->TrimLeadingBlanks(); value->TrimTrailingBlanks();
-    return true;
+    return true;*/
+    return false;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, dng_date_time_info* value) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if (it == m_RawExif.end()) return false;
 
     dng_date_time dt; dt.Parse((it->print(&m_RawExif)).c_str()); value->SetDateTime(dt);
-    return true;
+    return true;*/
+    return false;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, dng_srational* rational) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if ((it == m_RawExif.end()) || (it->count() < (component + 1))) return false;
 
     Exiv2::Rational exiv2Rational = (*it).toRational(component);
     *rational = dng_srational(exiv2Rational.first, exiv2Rational.second);
-    return true;
+    return true;*/
+    return false;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, dng_urational* rational) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if ((it == m_RawExif.end()) || (it->count() < (component + 1))) return false;
 
     Exiv2::URational exiv2Rational = (*it).toRational(component);
     *rational = dng_urational(exiv2Rational.first, exiv2Rational.second);
-    return true;
+    return true;*/
+    return false;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, uint32* value) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if ((it == m_RawExif.end()) || (it->count() < (component + 1))) return false;
 
     *value = static_cast<uint32>(it->toLong(component));
-    return true;
+    return true;*/
+    return false;
 }
 
 int NegativeProcessor::getRawExifTag(const char* exifTagName, uint32* valueArray, int32 maxFill) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if (it == m_RawExif.end()) return 0;
 
     int lengthToFill = std::min(maxFill, static_cast<int32>(it->count()));
     for (int i = 0; i < lengthToFill; i++)
         valueArray[i] = static_cast<uint32>(it->toLong(i));
-    return lengthToFill;
+    return lengthToFill;*/
+    return 0;
 }
 
 int NegativeProcessor::getRawExifTag(const char* exifTagName, int16* valueArray, int32 maxFill) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if (it == m_RawExif.end()) return 0;
 
     int lengthToFill = std::min(maxFill, static_cast<int32>(it->count()));
     for (int i = 0; i < lengthToFill; i++)
         valueArray[i] = static_cast<int16>(it->toLong(i));
-    return lengthToFill;
+    return lengthToFill;*/
+    return 0;
 }
 
 int NegativeProcessor::getRawExifTag(const char* exifTagName, dng_urational* valueArray, int32 maxFill) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if (it == m_RawExif.end()) return 0;
 
     int lengthToFill = std::min(maxFill, static_cast<int32>(it->count()));
@@ -791,14 +798,16 @@ int NegativeProcessor::getRawExifTag(const char* exifTagName, dng_urational* val
         Exiv2::URational exiv2Rational = (*it).toRational(i);
         valueArray[i] = dng_urational(exiv2Rational.first, exiv2Rational.second);
     }
-    return lengthToFill;
+    return lengthToFill;*/
+    return 0;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, long* size, unsigned char** data) {
-    Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
+    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if (it == m_RawExif.end()) return false;
 
     *data = new unsigned char[(*it).size()]; *size = (*it).size();
     (*it).copy((Exiv2::byte*)*data, Exiv2::bigEndian);
-    return true;
+    return true;*/
+    return false;
 }
