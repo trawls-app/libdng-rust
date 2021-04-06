@@ -29,5 +29,5 @@ add_library(dngbindings
         ${CMAKE_CURRENT_SOURCE_DIR}/vendorProcessors/variousVendorProcessor.cpp
         )
 
-target_link_libraries(dngbindings PRIVATE dng-sdk)
+target_link_libraries(dngbindings PRIVATE dng-sdk ZLIB::ZLIB)
 install(TARGETS dngbindings dng-sdk xmp-sdk)
