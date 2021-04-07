@@ -19,7 +19,6 @@ ADD_SUBDIRECTORY(dng_sdk)
 
 add_library(dngbindings
         ${CMAKE_CURRENT_SOURCE_DIR}/dng.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/DNGHandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/dnghost.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/negativeProcessor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rawConverter.cpp

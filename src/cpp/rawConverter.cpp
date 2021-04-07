@@ -19,6 +19,7 @@
 #include "rawConverter.h"
 
 #include <stdexcept>
+#include <iostream>
 
 #include "dng_negative.h"
 #include "dng_preview.h"
@@ -349,4 +350,8 @@ void RawConverter::writeJpeg(const std::string outFilename) {
         std::stringstream error; error << "Error while writing JPEG-file! (" << e.ErrorCode() << ": " << getDngErrorMessage(e.ErrorCode()) << ")";
         throw std::runtime_error(error.str());
     }
+}
+
+void RawConverter::dummy() {
+    std::cout << "RawConverter::dummy()" << std::endl;
 }

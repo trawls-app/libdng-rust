@@ -3,17 +3,17 @@
 #include <iostream>
 
 
-DNGHandler *createHandler(const char *app_name, const char *app_version) {
-    return new DNGHandler(app_name, app_version);
+RawConverter * createConverter(const char *app_name, const char *app_version) {
+    return new RawConverter(app_name, app_version, 100, 100);
 }
 
-void destroyHandler(DNGHandler *handler) {
-    std::cout << "Destroying handler" << std::endl;
+void destroyConverter(RawConverter *handler) {
+    std::cout << "Destroying RawConverter" << std::endl;
     delete handler;
 }
 
 
-void callHandlerDummy(DNGHandler *handler) {
+void callDummy(RawConverter *handler) {
     handler->dummy();
 }
 

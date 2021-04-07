@@ -44,6 +44,8 @@ public:
    void writeTiff(const std::string outFilename);
    void writeJpeg(const std::string outFilename);
 
+   void dummy();
+
    static void registerPublisher(std::function<void(const char*)> function);
 
 private:
