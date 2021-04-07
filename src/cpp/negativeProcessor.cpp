@@ -63,8 +63,7 @@ const char* getDngErrorMessage(int errorCode) {
 }
 
 
-NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, const char *filename,
-                                                       unsigned short int width,
+NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, unsigned short int width,
                                                        unsigned short int height) {
     // -----------------------------------------------------------------------------------------
     // Open and parse rawfile with libraw...
@@ -238,11 +237,13 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
 
     //libraw_colordata_t *colors  = &m_RawProcessor->imgdata.color;
 
-    for (int i = 0; i < 4; i++)
+    /*for (int i = 0; i < 4; i++)
 	    //m_negative->SetWhiteLevel(static_cast<uint32>(colors->maximum), i);
-        m_negative->SetWhiteLevel(static_cast<uint32>(255), i);
+        m_negative->SetWhiteLevel(static_cast<uint32>(255), i);*/
 
-    m_negative->SetBlackLevel(0, 0);
+    //m_negative->SetBlackLevel(0.5, 0);
+
+    //m_negative->SetQuadBlacks(0.5, 0.5, 0.5, 0.5);
     /*
     if ((m_negative->GetMosaicInfo() != NULL) && (m_negative->GetMosaicInfo()->fCFAPatternSize == dng_point(2, 2)))
         m_negative->SetQuadBlacks(colors->black + colors->cblack[0],

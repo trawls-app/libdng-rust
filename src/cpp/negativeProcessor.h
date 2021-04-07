@@ -30,8 +30,8 @@ const char* getDngErrorMessage(int errorCode);
 
 class NegativeProcessor {
 public:
-   static NegativeProcessor *createProcessor(AutoPtr<dng_host> &host, const char *filename, unsigned short int width,
-                                             unsigned short int height);
+   static NegativeProcessor *
+   createProcessor(AutoPtr<dng_host> &host, unsigned short int width, unsigned short int height);
    virtual ~NegativeProcessor();
 
    dng_negative* getNegative() {return m_negative.Get();}

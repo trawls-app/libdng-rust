@@ -69,6 +69,8 @@ RawConverter::RawConverter(const char *app_name, const char *app_version, unsign
     m_appName.Set(app_name);
     m_appVersion.Set(app_version);
     CurrentDateTimeAndZone(m_dateTimeNow);
+
+    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, image_width, image_height));
 }
 
 
@@ -82,17 +84,7 @@ void RawConverter::registerPublisher(std::function<void(const char*)> publisher)
 }
 
 
-void RawConverter::openRawFile(const std::string rawFilename) {
-    // -----------------------------------------------------------------------------------------
-    // Create processor and parse raw files
-
-    if (m_publishFunction != NULL) m_publishFunction("parsing raw file");
-
-    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, rawFilename.c_str(), image_width, image_height));
-}
-
-
-void RawConverter::buildNegative(const std::string dcpFilename) {
+void RawConverter::buildNegative(const std::string dcpFilename, unsigned short *image_buffer) {
     // -----------------------------------------------------------------------------------------
     // Set all metadata and properties
 
@@ -107,20 +99,14 @@ void RawConverter::buildNegative(const std::string dcpFilename) {
 
     m_negProcessor->getNegative()->RebuildIPTC(true);
 
-    m_negProcessor->backupProprietaryData();
+    //m_negProcessor->backupProprietaryData();
 
     // -----------------------------------------------------------------------------------------
     // Copy raw sensor data
 
     if (m_publishFunction != NULL) m_publishFunction("reading raw image data");
 
-    m_negProcessor->buildDNGImage(nullptr);
-}
-
-
-void RawConverter::embedRaw(const std::string rawFilename) {
-    if (m_publishFunction != NULL) m_publishFunction("embedding raw file");
-    m_negProcessor->embedOriginalRaw(rawFilename.c_str());
+    m_negProcessor->buildDNGImage(image_buffer);
 }
 
 

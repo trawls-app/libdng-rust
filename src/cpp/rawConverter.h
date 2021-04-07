@@ -34,9 +34,7 @@ public:
    RawConverter(const char *app_name, const char *app_version, unsigned short int width, unsigned short int height);
    virtual ~RawConverter();
 
-   void openRawFile(const std::string rawFilename);
-   void buildNegative(const std::string dcpFilename);
-   void embedRaw(const std::string rawFilename);
+   void buildNegative(const std::string dcpFilename, unsigned short *image_buffer);
    void renderImage();
    void renderPreviews();
 
