@@ -1,5 +1,3 @@
-#![feature(vec_into_raw_parts)]
-
 use std::ffi::CString;
 use std::ffi::c_void;
 use std::os::raw::c_char;
@@ -43,11 +41,11 @@ impl DNGWriter {
     }
 
     pub fn build_negative(&self, image_data: Vec<u16>) {
-        let (ptr, len, _cap) = image_data.into_raw_parts();
-        println!("Creating negative of size {}", len);
+        println!("Creating negative of size {}", image_data.len());
+        let mut data = image_data.into_boxed_slice();
 
         unsafe {
-            buildNegative(self.handler, ptr);
+            buildNegative(self.handler, data.as_mut_ptr());
         }
     }
 
