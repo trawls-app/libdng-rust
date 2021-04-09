@@ -4,8 +4,8 @@
 
 
 RawConverter *
-createConverter(const char *app_name, const char *app_version, unsigned short int width, unsigned short int height) {
-    auto converter = new RawConverter(app_name, app_version, width, height);
+createConverter(const char *app_name, const char *app_version, ImageInfoContainer *image_info) {
+    auto converter = new RawConverter(app_name, app_version, image_info);
     converter->registerPublisher(_write_output);
     return converter;
 }

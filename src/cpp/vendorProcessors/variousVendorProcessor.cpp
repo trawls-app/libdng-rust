@@ -29,9 +29,8 @@
 #include "variousVendorProcessor.h"
 
 
-VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, unsigned short int width,
-                                               unsigned short int height)
-                                             : NegativeProcessor(host, width, height) {}
+VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info)
+                                             : NegativeProcessor(host, image_info) {}
 
 
 void setString(uint32 inInt, dng_string *outString) {

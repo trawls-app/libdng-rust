@@ -22,6 +22,8 @@
 #include <dng_host.h>
 #include <dng_negative.h>
 #include <dng_exif.h>
+
+#include "wrapper.h"
 // #include <exiv2/image.hpp>
 
 //class LibRaw;
@@ -31,7 +33,7 @@ const char* getDngErrorMessage(int errorCode);
 class NegativeProcessor {
 public:
    static NegativeProcessor *
-   createProcessor(AutoPtr<dng_host> &host, unsigned short int width, unsigned short int height);
+   createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info);
    virtual ~NegativeProcessor();
 
    dng_negative* getNegative() {return m_negative.Get();}
@@ -46,7 +48,7 @@ public:
    virtual void embedOriginalRaw(const char *rawFilename);
 
 protected:
-   NegativeProcessor(AutoPtr<dng_host> &host, unsigned short int width, unsigned short int height);
+   NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info);
 
    virtual dng_memory_stream* createDNGPrivateTag();
 
@@ -66,6 +68,7 @@ protected:
    bool getRawExifTag(const char* exifTagName, long* size, unsigned char** data);
 
    unsigned short int image_width, image_height;
+   ImageInfoContainer * rs_image;
 
    // Source: Raw-file
    //AutoPtr<LibRaw> m_RawProcessor;

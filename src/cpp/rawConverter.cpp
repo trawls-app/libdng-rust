@@ -51,13 +51,11 @@ dng_file_stream* openFileStream(const std::string &outFilename) {
 }
 
 
-RawConverter::RawConverter(const char *app_name, const char *app_version, unsigned short int width,
-                           unsigned short int height) {
+RawConverter::RawConverter(const char *app_name, const char *app_version, ImageInfoContainer *image_info) {
     // -----------------------------------------------------------------------------------------
     // Init XMP SDK and some global variables we will need
 
-    image_width = width;
-    image_height = height;
+    std::cout << "Image Info: " << image_info->make << " " << image_info->model << std::endl;
 
     dng_xmp_sdk::InitializeSDK();
 
@@ -70,7 +68,7 @@ RawConverter::RawConverter(const char *app_name, const char *app_version, unsign
     m_appVersion.Set(app_version);
     CurrentDateTimeAndZone(m_dateTimeNow);
 
-    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, image_width, image_height));
+    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, image_info));
 }
 
 

@@ -63,8 +63,7 @@ const char* getDngErrorMessage(int errorCode) {
 }
 
 
-NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, unsigned short int width,
-                                                       unsigned short int height) {
+NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info) {
     // -----------------------------------------------------------------------------------------
     // Open and parse rawfile with libraw...
 
@@ -112,12 +111,12 @@ NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, 
 //    else if (!strcmp(rawProcessor->imgdata.idata.make, "FUJIFILM"))
 //        return new FujiProcessor(host, rawProcessor.Release(), rawImage);
 
-    return new VariousVendorProcessor(host, width, height);
+    return new VariousVendorProcessor(host, image_info);
 }
 
 
-NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, unsigned short int width, unsigned short int height)
-                                   : m_host(host), image_width(width), image_height(height) {
+NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info)
+                                   : m_host(host), image_width(image_info->width), image_height(image_info->height), rs_image(image_info) {
     m_negative.Reset(m_host->Make_dng_negative());
 }
 
@@ -158,9 +157,9 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
 	// Model
 
     dng_string makeModel;
-    //makeModel.Append(iparams->make);
-    makeModel.Append(" Dummy ");
-    //makeModel.Append(iparams->model);
+    makeModel.Append(rs_image->make);
+    makeModel.Append(" ");
+    makeModel.Append(rs_image->model);
     m_negative->SetModelName(makeModel.Get());
 
     // -----------------------------------------------------------------------------------------
@@ -181,7 +180,8 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
 	// ColorKeys (this needs to happen before Mosaic - how about documenting that in the SDK???)
 
     m_negative->SetColorChannels(3);
-    m_negative->SetColorKeys(colorKeyRed, colorKeyGreen, colorKeyGreen, colorKeyBlue);
+    m_negative->SetColorKeys(colorKeyRed, colorKeyGreen, colorKeyBlue);
+    //m_negative->SetColorKeys(colorKeyGreen, colorKeyRed, colorKeyBlue, colorKeyGreen);
     /*m_negative->SetColorChannels(iparams->colors);
     m_negative->SetColorKeys(colorKey(iparams->cdesc[0]), colorKey(iparams->cdesc[1]), 
                              colorKey(iparams->cdesc[2]), colorKey(iparams->cdesc[3]));*/
@@ -189,7 +189,7 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
     // -----------------------------------------------------------------------------------------
     // Mosaic
 
-    m_negative->SetBayerMosaic(0);
+    m_negative->SetBayerMosaic(1);
     /*if (iparams->colors == 4) m_negative->SetQuadMosaic(iparams->filters);
     else switch(iparams->filters) {
             case 0xe1e1e1e1:  m_negative->SetBayerMosaic(0); break;
@@ -206,20 +206,24 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
     m_negative->SetActiveArea(dng_rect(sizes->top_margin, sizes->left_margin,
                                        sizes->top_margin + image_height, sizes->left_margin + image_width));*/
     m_negative->SetDefaultScale(dng_urational(image_width, image_width), dng_urational(image_height, image_height));
-    m_negative->SetActiveArea(dng_rect(0, 0, image_height, image_width));
+    m_negative->SetActiveArea(dng_rect(38, 72, image_height, image_width));
 
-    uint32 cropWidth, cropHeight;
+    /*uint32 cropWidth, cropHeight;
     if (!getRawExifTag("Exif.Photo.PixelXDimension", 0, &cropWidth) ||
         !getRawExifTag("Exif.Photo.PixelYDimension", 0, &cropHeight)) {
         cropWidth = image_width - 16;
         cropHeight = image_height - 16;
-    }
+    }*/
+    uint32 cropWidth = image_width - 74, cropHeight = image_height - 40;
 
     int cropLeftMargin = (cropWidth > image_width ) ? 0 : (image_width  - cropWidth) / 2;
     int cropTopMargin = (cropHeight > image_height) ? 0 : (image_height - cropHeight) / 2;
 
     m_negative->SetDefaultCropOrigin(cropLeftMargin, cropTopMargin);
     m_negative->SetDefaultCropSize(cropWidth, cropHeight);
+
+    // New
+    m_negative->SetMaskedArea(dng_rect(0, 0, 3708, 68));
 
     // -----------------------------------------------------------------------------------------
     // CameraNeutral
@@ -230,6 +234,14 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
     /*dng_vector cameraNeutral(iparams->colors);
     for (int i = 0; i < iparams->colors; i++)
         cameraNeutral[i] = m_RawProcessor->imgdata.color.cam_mul[i] == 0 ? 0.0 : 1.0 / m_RawProcessor->imgdata.color.cam_mul[i];*/
+
+    for (int i = 0; i < 4; i++)
+        cameraNeutral[i] = rs_image->camera_neutral[i];
+
+    /*cameraNeutral[0] = 1.0 / 1953;
+    cameraNeutral[1] = 1.0 / 1024;
+    cameraNeutral[2] = 1.0 / 1711;*/
+
     m_negative->SetCameraNeutral(cameraNeutral);
 
     // -----------------------------------------------------------------------------------------
@@ -241,9 +253,14 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
 	    //m_negative->SetWhiteLevel(static_cast<uint32>(colors->maximum), i);
         m_negative->SetWhiteLevel(static_cast<uint32>(255), i);*/
 
-    //m_negative->SetBlackLevel(0.5, 0);
+    for (int i = 0; i < 4; i++)
+        m_negative->SetWhiteLevel(rs_image->white_levels[i], i);
 
-    //m_negative->SetQuadBlacks(0.5, 0.5, 0.5, 0.5);
+    for (int i = 0; i < 4; i++)
+        m_negative->SetBlackLevel(rs_image->black_levels[i], i);
+
+
+    //m_negative->SetQuadBlacks(2048, 2048, 2048, 0);
     /*
     if ((m_negative->GetMosaicInfo() != NULL) && (m_negative->GetMosaicInfo()->fCFAPatternSize == dng_point(2, 2)))
         m_negative->SetQuadBlacks(colors->black + colors->cblack[0],
@@ -282,14 +299,49 @@ void NegativeProcessor::setCameraProfile(const char *dcpFilename) {
 
         dng_string profName;
         //profName.Append(m_RawProcessor->imgdata.idata.make);
-        profName.Append(" Dummy ");
+        profName.Append(rs_image->make);
+        profName.Append(" ");
+        profName.Append(rs_image->model);
         //profName.Append(m_RawProcessor->imgdata.idata.model);
 
         prof->SetName(profName.Get());
         prof->SetCalibrationIlluminant1(lsD65);
 
         //int colors = m_RawProcessor->imgdata.idata.colors;
-        auto colormatrix1 = new dng_matrix_3by3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+        //auto colormatrix1 = new dng_matrix_3by3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+        /*auto colormatrix1 = new dng_matrix_3by3(1.0, 0.0, 0.0,
+                                                0.0, 1.0, 0.0,
+                                                0.0, 0.0, 1.0);*/
+
+        // XYZ to cam
+        /*auto colormatrix1 = new dng_matrix_3by3(7034, -804, -1014,
+                                                -4420, 12564, 2058,
+                                                -851, 1994, 5758);*/
+        // XYZ to cam (transposed)
+        /*auto colormatrix1 = new dng_matrix_3by3(7034, -4420, -851,
+                                                -804, 12564, 1994,
+                                                -1014, 2058, 5758);*/
+
+        // Cam to XYZ (normalized)
+        /*auto colormatrix1 = new dng_matrix_3by3(0.77539825, 0.05795105, 0.16665071,
+                                                0.2692878, 0.8809585, -0.15024652,
+                                                0.02134493, -0.29651177, 1.275167);*/
+
+        // Cam to XYZ (normalized +  transposed)
+        /*auto colormatrix1 = new dng_matrix_3by3(0.77539825, 0.2692878, 0.02134493,
+                                                0.05795105, 0.8809585, -0.29651177,
+                                                0.16665071, -0.15024652, 1.275167);*/
+
+        // Cam to XYZ
+        /*auto colormatrix1 = new dng_matrix_3by3(0.00014865765, 0.000005680392, 0.000024148776,
+                                                0.000051627278, 0.00008635158, -0.000021771708,
+                                                0.0000040921877, -0.000029064082, 0.00018478002);*/
+
+
+        auto *colormatrix1 = new dng_matrix(3, 3);
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                (*colormatrix1)[i][j] = rs_image->xyz_to_cam[i][j];
         prof->SetColorMatrix1(*colormatrix1);
 
         /*
@@ -310,7 +362,7 @@ void NegativeProcessor::setCameraProfile(const char *dcpFilename) {
             }
             prof->SetColorMatrix1(*colormatrix1);
         }*/
-        prof->SetProfileCalibrationSignature("com.fimagena.raw2dng");
+        prof->SetProfileCalibrationSignature("com.croaxeldyphic.dng-rs");
     }
 
     m_negative->AddProfile(prof);

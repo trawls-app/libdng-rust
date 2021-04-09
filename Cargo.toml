@@ -15,6 +15,7 @@ name = "conv2dng"
 path = "src/convert.rs"
 
 [dependencies]
+arrayvec = "0.7.0"
 version = "3.0.0"
 rawloader = "0.36.2"
 
