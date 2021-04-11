@@ -2,6 +2,62 @@
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
+pub struct Area {
+    pub top: ::std::os::raw::c_ushort,
+    pub left: ::std::os::raw::c_ushort,
+    pub bottom: ::std::os::raw::c_ushort,
+    pub right: ::std::os::raw::c_ushort,
+}
+#[test]
+fn bindgen_test_layout_Area() {
+    assert_eq!(
+        ::std::mem::size_of::<Area>(),
+        8usize,
+        concat!("Size of: ", stringify!(Area))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Area>(),
+        2usize,
+        concat!("Alignment of ", stringify!(Area))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Area>())).top as *const _ as usize },
+        0usize,
+        concat!("Offset of field: ", stringify!(Area), "::", stringify!(top))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Area>())).left as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Area),
+            "::",
+            stringify!(left)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Area>())).bottom as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Area),
+            "::",
+            stringify!(bottom)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Area>())).right as *const _ as usize },
+        6usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Area),
+            "::",
+            stringify!(right)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct ImageInfoContainer {
     pub make: *const ::std::os::raw::c_char,
     pub model: *const ::std::os::raw::c_char,
@@ -11,12 +67,13 @@ pub struct ImageInfoContainer {
     pub white_levels: [f64; 4usize],
     pub camera_neutral: [f64; 3usize],
     pub xyz_to_cam: [[f32; 3usize]; 3usize],
+    pub active_area: Area,
 }
 #[test]
 fn bindgen_test_layout_ImageInfoContainer() {
     assert_eq!(
         ::std::mem::size_of::<ImageInfoContainer>(),
-        152usize,
+        160usize,
         concat!("Size of: ", stringify!(ImageInfoContainer))
     );
     assert_eq!(
@@ -104,6 +161,16 @@ fn bindgen_test_layout_ImageInfoContainer() {
             stringify!(ImageInfoContainer),
             "::",
             stringify!(xyz_to_cam)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ImageInfoContainer>())).active_area as *const _ as usize },
+        148usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ImageInfoContainer),
+            "::",
+            stringify!(active_area)
         )
     );
 }

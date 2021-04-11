@@ -1,4 +1,4 @@
-use crate::bindings::ImageInfoContainer;
+use crate::bindings::{Area, ImageInfoContainer};
 
 use arrayvec::ArrayVec;
 use rawloader::RawImage;
@@ -37,7 +37,13 @@ impl ImageInfo {
             black_levels: black_levels.into_inner().unwrap(),
             white_levels: white_levels.into_inner().unwrap(),
             camera_neutral: neutrals.into_inner().unwrap(),
-            xyz_to_cam: colormatrix.into_inner().unwrap()
+            xyz_to_cam: colormatrix.into_inner().unwrap(),
+            active_area: Area {
+                top: self.image.crops[0] as u16,
+                left: self.image.crops[3] as u16,
+                bottom: (self.image.height - self.image.crops[2]) as u16,
+                right: (self.image.width - self.image.crops[1]) as u16
+            },
         }
     }
 }

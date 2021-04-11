@@ -206,7 +206,12 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
     m_negative->SetActiveArea(dng_rect(sizes->top_margin, sizes->left_margin,
                                        sizes->top_margin + image_height, sizes->left_margin + image_width));*/
     m_negative->SetDefaultScale(dng_urational(image_width, image_width), dng_urational(image_height, image_height));
-    m_negative->SetActiveArea(dng_rect(38, 72, image_height, image_width));
+    m_negative->SetActiveArea(dng_rect(
+                rs_image->active_area.top,
+                rs_image->active_area.left,
+                rs_image->active_area.bottom,
+                rs_image->active_area.right
+            ));
 
     /*uint32 cropWidth, cropHeight;
     if (!getRawExifTag("Exif.Photo.PixelXDimension", 0, &cropWidth) ||
@@ -214,16 +219,21 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
         cropWidth = image_width - 16;
         cropHeight = image_height - 16;
     }*/
-    uint32 cropWidth = image_width - 74, cropHeight = image_height - 40;
+
+    //    uint32 cropWidth = image_width - 74, cropHeight = image_height - 40;
+    uint32 cropWidth = rs_image->active_area.right - rs_image->active_area.left;
+    uint32 cropHeight = rs_image->active_area.bottom - rs_image->active_area.top;
+    std::cout << "cropWidth " << cropWidth << ", cropHeight " << cropHeight << std::endl;
 
     int cropLeftMargin = (cropWidth > image_width ) ? 0 : (image_width  - cropWidth) / 2;
     int cropTopMargin = (cropHeight > image_height) ? 0 : (image_height - cropHeight) / 2;
 
-    m_negative->SetDefaultCropOrigin(cropLeftMargin, cropTopMargin);
+    //m_negative->SetDefaultCropOrigin(cropLeftMargin, cropTopMargin);
+    m_negative->SetDefaultCropOrigin(rs_image->active_area.left, rs_image->active_area.top);
     m_negative->SetDefaultCropSize(cropWidth, cropHeight);
 
     // New
-    m_negative->SetMaskedArea(dng_rect(0, 0, 3708, 68));
+    //m_negative->SetMaskedArea(dng_rect(0, 0, 3708, 68));
 
     // -----------------------------------------------------------------------------------------
     // CameraNeutral
