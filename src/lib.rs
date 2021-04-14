@@ -1,5 +1,5 @@
 pub mod image_info;
-mod bindings;
+pub mod bindings;
 
 use std::ffi::CString;
 use std::ffi::c_void;
@@ -10,7 +10,7 @@ use bindings::ImageInfoContainer;
 
 
 extern "C" {
-    fn createConverter(image: *mut ImageInfoContainer, make: *const c_char, model: *const c_char) -> *const c_void;
+    fn createConverter(image: ImageInfoContainer, make: *const c_char, model: *const c_char) -> *const c_void;
     fn destroyConverter(handler: *const c_void);
     fn callDummy(handler: *const c_void);
     fn setAppName(handler: *const c_void, app_name: *const c_char, app_version: *const c_char);
@@ -28,13 +28,13 @@ pub struct DNGWriter {
 
 impl DNGWriter {
     pub fn new(info: ImageInfoContainer, make: String, model: String) -> DNGWriter {
-        let mut image_info = Box::new(info);
+        //let mut image_info = Box::new(info);
         let make_str = CString::new(make).unwrap();
         let model_str = CString::new(model).unwrap();
 
         unsafe {
             DNGWriter {
-                handler: createConverter( &mut *image_info,
+                handler: createConverter( info,
                                           make_str.as_ptr(),
                                           model_str.as_ptr()
                 )

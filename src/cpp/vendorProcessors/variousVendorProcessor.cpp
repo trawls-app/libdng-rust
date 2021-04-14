@@ -29,7 +29,7 @@
 #include "variousVendorProcessor.h"
 
 
-VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info,
+VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info,
                                                const char *make, const char *model)
                                              : NegativeProcessor(host, image_info, make, model) {}
 

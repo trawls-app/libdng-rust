@@ -63,7 +63,7 @@ const char* getDngErrorMessage(int errorCode) {
 }
 
 
-NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info,
+NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info,
                                                        const char *make,
                                                        const char *model) {
     // -----------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, 
     try {
         rawImage = Exiv2::ImageFactory::open(filename);
         rawImage->readMetadata();
-    } 
+    }
     catch (Exiv2::Error& e) {
         std::stringstream error; error << "Exiv2-error while opening/parsing rawFile (code " << e.code() << "): " << e.what();
         throw std::runtime_error(error.str());
@@ -117,9 +117,9 @@ NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, 
 }
 
 
-NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info, const char *make,
+NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info, const char *make,
                                      const char *model)
-                                   : m_host(host), image_width(image_info->width), image_height(image_info->height), rs_image(image_info), make(make), model(model) {
+                                   : m_host(host), image_width(image_info.width), image_height(image_info.height), rs_image(image_info), make(make), model(model) {
     m_negative.Reset(m_host->Make_dng_negative());
     make = "TestMake";
     model = "TestModel";
@@ -168,7 +168,7 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
     m_negative->SetModelName(makeModel.Get());
 
     // -----------------------------------------------------------------------------------------
-    // Orientation 
+    // Orientation
 
     /*switch (sizes->flip) {
         case 180:
@@ -188,7 +188,7 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
     m_negative->SetColorKeys(colorKeyRed, colorKeyGreen, colorKeyBlue);
     //m_negative->SetColorKeys(colorKeyGreen, colorKeyRed, colorKeyBlue, colorKeyGreen);
     /*m_negative->SetColorChannels(iparams->colors);
-    m_negative->SetColorKeys(colorKey(iparams->cdesc[0]), colorKey(iparams->cdesc[1]), 
+    m_negative->SetColorKeys(colorKey(iparams->cdesc[0]), colorKey(iparams->cdesc[1]),
                              colorKey(iparams->cdesc[2]), colorKey(iparams->cdesc[3]));*/
 
     // -----------------------------------------------------------------------------------------
@@ -212,10 +212,10 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
                                        sizes->top_margin + image_height, sizes->left_margin + image_width));*/
     m_negative->SetDefaultScale(dng_urational(image_width, image_width), dng_urational(image_height, image_height));
     m_negative->SetActiveArea(dng_rect(
-                rs_image->active_area.top,
-                rs_image->active_area.left,
-                rs_image->active_area.bottom,
-                rs_image->active_area.right
+                rs_image.active_area.top,
+                rs_image.active_area.left,
+                rs_image.active_area.bottom,
+                rs_image.active_area.right
             ));
 
     /*uint32 cropWidth, cropHeight;
@@ -226,15 +226,15 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
     }*/
 
     //    uint32 cropWidth = image_width - 74, cropHeight = image_height - 40;
-    uint32 cropWidth = rs_image->active_area.right - rs_image->active_area.left;
-    uint32 cropHeight = rs_image->active_area.bottom - rs_image->active_area.top;
+    uint32 cropWidth = rs_image.active_area.right - rs_image.active_area.left;
+    uint32 cropHeight = rs_image.active_area.bottom - rs_image.active_area.top;
     std::cout << "cropWidth " << cropWidth << ", cropHeight " << cropHeight << std::endl;
 
     int cropLeftMargin = (cropWidth > image_width ) ? 0 : (image_width  - cropWidth) / 2;
     int cropTopMargin = (cropHeight > image_height) ? 0 : (image_height - cropHeight) / 2;
 
     //m_negative->SetDefaultCropOrigin(cropLeftMargin, cropTopMargin);
-    m_negative->SetDefaultCropOrigin(rs_image->active_area.left, rs_image->active_area.top);
+    m_negative->SetDefaultCropOrigin(rs_image.active_area.left, rs_image.active_area.top);
     m_negative->SetDefaultCropSize(cropWidth, cropHeight);
 
     // New
@@ -251,7 +251,7 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
         cameraNeutral[i] = m_RawProcessor->imgdata.color.cam_mul[i] == 0 ? 0.0 : 1.0 / m_RawProcessor->imgdata.color.cam_mul[i];*/
 
     for (int i = 0; i < 4; i++)
-        cameraNeutral[i] = rs_image->camera_neutral[i];
+        cameraNeutral[i] = rs_image.camera_neutral[i];
 
     /*cameraNeutral[0] = 1.0 / 1953;
     cameraNeutral[1] = 1.0 / 1024;
@@ -269,10 +269,10 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
         m_negative->SetWhiteLevel(static_cast<uint32>(255), i);*/
 
     for (int i = 0; i < 4; i++)
-        m_negative->SetWhiteLevel(rs_image->white_levels[i], i);
+        m_negative->SetWhiteLevel(rs_image.white_levels[i], i);
 
     for (int i = 0; i < 4; i++)
-        m_negative->SetBlackLevel(rs_image->black_levels[i], i);
+        m_negative->SetBlackLevel(rs_image.black_levels[i], i);
 
 
     //m_negative->SetQuadBlacks(2048, 2048, 2048, 0);
@@ -282,7 +282,7 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
                                   colors->black + colors->cblack[1],
                                   colors->black + colors->cblack[2],
                                   colors->black + colors->cblack[3]);
-    else 
+    else
     	m_negative->SetBlackLevel(colors->black + colors->cblack[0], 0);*/
 
     // -----------------------------------------------------------------------------------------
@@ -356,7 +356,7 @@ void NegativeProcessor::setCameraProfile(const char *dcpFilename) {
         auto *colormatrix1 = new dng_matrix(3, 3);
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
-                (*colormatrix1)[i][j] = rs_image->xyz_to_cam[i][j];
+                (*colormatrix1)[i][j] = rs_image.xyz_to_cam[i][j];
         prof->SetColorMatrix1(*colormatrix1);
 
         /*

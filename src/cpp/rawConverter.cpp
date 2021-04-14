@@ -51,7 +51,7 @@ dng_file_stream* openFileStream(const std::string &outFilename) {
 }
 
 
-RawConverter::RawConverter(ImageInfoContainer *image_info, const char *make, const char *model) {
+RawConverter::RawConverter(ImageInfoContainer image_info, const char *make, const char *model) {
     // -----------------------------------------------------------------------------------------
     // Init XMP SDK and some global variables we will need
 

@@ -4,7 +4,7 @@
 
 
 RawConverter *
-createConverter(ImageInfoContainer *image_info, const char *make, const char *model) {
+createConverter(ImageInfoContainer image_info, const char *make, const char *model) {
     auto converter = new RawConverter(image_info, make, model);
     converter->registerPublisher(_write_output);
     return converter;
