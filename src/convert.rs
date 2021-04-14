@@ -2,7 +2,6 @@ use std::env;
 use rawloader;
 use std::path::Path;
 
-use ::libdng::image_info::ImageInfo;
 use libdng::image_info::DNGWriting;
 
 
@@ -20,9 +19,7 @@ fn main() {
 
     println!("Converting '{}' to '{}' and '{}'", file_in, file_out_jpg, file_out_dng);
     let image = rawloader::decode_file(file_in).unwrap();
-    let info = ImageInfo::new(image.clone()).unwrap();
-
-    let writer = info.get_dng_writer();
+    let writer = image.get_dng_writer();
 
     println!("Make: '{}',\tModel: '{}'", image.clean_make, image.clean_model);
     println!("Width: {},\tHeight: {}", image.width, image.height);
