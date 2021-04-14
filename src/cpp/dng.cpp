@@ -4,8 +4,8 @@
 
 
 RawConverter *
-createConverter(const char *app_name, const char *app_version, ImageInfoContainer *image_info) {
-    auto converter = new RawConverter(app_name, app_version, image_info);
+createConverter(ImageInfoContainer *image_info, const char *make, const char *model) {
+    auto converter = new RawConverter(image_info, make, model);
     converter->registerPublisher(_write_output);
     return converter;
 }
@@ -17,6 +17,10 @@ void destroyConverter(RawConverter *handler) {
 
 void callDummy(RawConverter *handler) {
     handler->dummy();
+}
+
+void setAppName(RawConverter *handler, const char *app_name, const char *app_version) {
+    handler->setAppName(app_name, app_version);
 }
 
 void buildNegative(RawConverter *handler, unsigned short *image_buffer) {

@@ -31,9 +31,10 @@
 
 class RawConverter {
 public:
-   RawConverter(const char *app_name, const char *app_version, ImageInfoContainer *image_info);
+   RawConverter(ImageInfoContainer *image_info, const char *make, const char *model);
    virtual ~RawConverter();
 
+   void setAppName(const char *app_name, const char *app_version);
    void buildNegative(const std::string dcpFilename, unsigned short *image_buffer);
    void renderImage();
    void renderPreviews();

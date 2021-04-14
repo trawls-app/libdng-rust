@@ -29,8 +29,9 @@
 #include "variousVendorProcessor.h"
 
 
-VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info)
-                                             : NegativeProcessor(host, image_info) {}
+VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info,
+                                               const char *make, const char *model)
+                                             : NegativeProcessor(host, image_info, make, model) {}
 
 
 void setString(uint32 inInt, dng_string *outString) {

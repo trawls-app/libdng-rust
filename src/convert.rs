@@ -2,8 +2,8 @@ use std::env;
 use rawloader;
 use std::path::Path;
 
-use ::libdng::DNGWriter;
 use ::libdng::image_info::ImageInfo;
+use libdng::image_info::DNGWriting;
 
 
 fn main() {
@@ -22,7 +22,7 @@ fn main() {
     let image = rawloader::decode_file(file_in).unwrap();
     let info = ImageInfo::new(image.clone()).unwrap();
 
-    let writer = DNGWriter::new(info.get_container());
+    let writer = info.get_dng_writer();
 
     println!("Make: '{}',\tModel: '{}'", image.clean_make, image.clean_model);
     println!("Width: {},\tHeight: {}", image.width, image.height);
@@ -77,13 +77,6 @@ fn main() {
     }
 
     println!("\nCFA: {}\n", image.cfa.name);
-
-    if let rawloader::RawImageData::Integer(data) = image.data {
-        writer.build_negative(data);
-    } else {
-        unimplemented!("Can't parse RAWs with non-integer data, yet.");
-    }
-
 
     writer.write_jpg(Path::new(file_out_jpg.as_str()));
     writer.write_dng(Path::new(file_out_dng.as_str()))

@@ -13,8 +13,6 @@ typedef struct Area {
 } Area;
 
 typedef struct ImageInfoContainer {
-    const char *make;
-    const char *model;
     unsigned short width, height;
     const double black_levels[4], white_levels[4];
     const double camera_neutral[3];

@@ -51,11 +51,11 @@ dng_file_stream* openFileStream(const std::string &outFilename) {
 }
 
 
-RawConverter::RawConverter(const char *app_name, const char *app_version, ImageInfoContainer *image_info) {
+RawConverter::RawConverter(ImageInfoContainer *image_info, const char *make, const char *model) {
     // -----------------------------------------------------------------------------------------
     // Init XMP SDK and some global variables we will need
 
-    std::cout << "Image Info: " << image_info->make << " " << image_info->model << std::endl;
+    std::cout << "Image Info: " << make << " " << model << std::endl;
 
     dng_xmp_sdk::InitializeSDK();
 
@@ -64,11 +64,9 @@ RawConverter::RawConverter(const char *app_name, const char *app_version, ImageI
     m_host->SetSaveLinearDNG(false);
     m_host->SetKeepOriginalFile(true);
 
-    m_appName.Set(app_name);
-    m_appVersion.Set(app_version);
     CurrentDateTimeAndZone(m_dateTimeNow);
 
-    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, image_info));
+    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, image_info, make, model));
 }
 
 
@@ -76,6 +74,10 @@ RawConverter::~RawConverter() {
     dng_xmp_sdk::TerminateSDK();
 }
 
+void RawConverter::setAppName(const char *app_name, const char *app_version) {
+    m_appName.Set(app_name);
+    m_appVersion.Set(app_version);
+}
 
 void RawConverter::registerPublisher(std::function<void(const char*)> publisher) {
     m_publishFunction = publisher;

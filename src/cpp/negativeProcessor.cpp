@@ -63,7 +63,9 @@ const char* getDngErrorMessage(int errorCode) {
 }
 
 
-NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info) {
+NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info,
+                                                       const char *make,
+                                                       const char *model) {
     // -----------------------------------------------------------------------------------------
     // Open and parse rawfile with libraw...
 
@@ -111,13 +113,16 @@ NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, 
 //    else if (!strcmp(rawProcessor->imgdata.idata.make, "FUJIFILM"))
 //        return new FujiProcessor(host, rawProcessor.Release(), rawImage);
 
-    return new VariousVendorProcessor(host, image_info);
+    return new VariousVendorProcessor(host, image_info, make, model);
 }
 
 
-NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info)
-                                   : m_host(host), image_width(image_info->width), image_height(image_info->height), rs_image(image_info) {
+NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info, const char *make,
+                                     const char *model)
+                                   : m_host(host), image_width(image_info->width), image_height(image_info->height), rs_image(image_info), make(make), model(model) {
     m_negative.Reset(m_host->Make_dng_negative());
+    make = "TestMake";
+    model = "TestModel";
 }
 
 
@@ -157,9 +162,9 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
 	// Model
 
     dng_string makeModel;
-    makeModel.Append(rs_image->make);
+    makeModel.Append(make.c_str());
     makeModel.Append(" ");
-    makeModel.Append(rs_image->model);
+    makeModel.Append(model.c_str());
     m_negative->SetModelName(makeModel.Get());
 
     // -----------------------------------------------------------------------------------------
@@ -309,9 +314,9 @@ void NegativeProcessor::setCameraProfile(const char *dcpFilename) {
 
         dng_string profName;
         //profName.Append(m_RawProcessor->imgdata.idata.make);
-        profName.Append(rs_image->make);
+        profName.Append(make.c_str());
         profName.Append(" ");
-        profName.Append(rs_image->model);
+        profName.Append(model.c_str());
         //profName.Append(m_RawProcessor->imgdata.idata.model);
 
         prof->SetName(profName.Get());

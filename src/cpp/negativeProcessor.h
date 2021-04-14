@@ -33,7 +33,8 @@ const char* getDngErrorMessage(int errorCode);
 class NegativeProcessor {
 public:
    static NegativeProcessor *
-   createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info);
+   createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info, const char *make,
+                   const char *model);
    virtual ~NegativeProcessor();
 
    dng_negative* getNegative() {return m_negative.Get();}
@@ -48,7 +49,8 @@ public:
    virtual void embedOriginalRaw(const char *rawFilename);
 
 protected:
-   NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info);
+   NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer *image_info, const char *make,
+                     const char *model);
 
    virtual dng_memory_stream* createDNGPrivateTag();
 
@@ -68,6 +70,7 @@ protected:
    bool getRawExifTag(const char* exifTagName, long* size, unsigned char** data);
 
    unsigned short int image_width, image_height;
+   std::string make, model;
    ImageInfoContainer * rs_image;
 
    // Source: Raw-file

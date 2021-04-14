@@ -9,13 +9,11 @@ use std::path::Path;
 use bindings::ImageInfoContainer;
 
 
-#[macro_use]
-extern crate version;
-
 extern "C" {
-    fn createConverter(app_name: *const c_char, app_version: *const c_char, image: *mut ImageInfoContainer) -> *const c_void;
+    fn createConverter(image: *mut ImageInfoContainer, make: *const c_char, model: *const c_char) -> *const c_void;
     fn destroyConverter(handler: *const c_void);
     fn callDummy(handler: *const c_void);
+    fn setAppName(handler: *const c_void, app_name: *const c_char, app_version: *const c_char);
     fn buildNegative(handler: *const c_void, image_buffer: *mut c_ushort);
     fn writeDNG(handler: *const c_void, path: *const c_char);
     fn writeTIFF(handler: *const c_void, path: *const c_char);
@@ -29,14 +27,17 @@ pub struct DNGWriter {
 
 
 impl DNGWriter {
-    pub fn new(image: ImageInfoContainer) -> DNGWriter {
-        let app_str = CString::new("libdng-rs").unwrap();
-        let ver_str = CString::new(version!()).unwrap();
-        let mut image_info = Box::new(image);
+    pub fn new(info: ImageInfoContainer, make: String, model: String) -> DNGWriter {
+        let mut image_info = Box::new(info);
+        let make_str = CString::new(make).unwrap();
+        let model_str = CString::new(model).unwrap();
 
         unsafe {
             DNGWriter {
-                handler: createConverter(app_str.as_ptr(), ver_str.as_ptr() , &mut *image_info)
+                handler: createConverter( &mut *image_info,
+                                          make_str.as_ptr(),
+                                          model_str.as_ptr()
+                )
             }
         }
     }
@@ -44,6 +45,15 @@ impl DNGWriter {
     pub fn dummy(&self) {
         unsafe {
             callDummy(self.handler.as_ref().unwrap());
+        }
+    }
+
+    pub fn set_app_name(&self, name: String, version: String) {
+        let app_str = CString::new(name).unwrap();
+        let ver_str = CString::new(version).unwrap();
+
+        unsafe {
+            setAppName(self.handler, app_str.as_ptr(), ver_str.as_ptr())
         }
     }
 
