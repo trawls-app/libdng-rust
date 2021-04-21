@@ -152,3 +152,155 @@ fn bindgen_test_layout_ImageInfoContainer() {
         )
     );
 }
+pub const ExifTag_ExposureTime: ExifTag = 0;
+pub const ExifTag_ApertureValue: ExifTag = 1;
+pub const ExifTag_CameraMake: ExifTag = 2;
+pub const ExifTag_CameraModel: ExifTag = 3;
+pub const ExifTag_ISOSpeedValue: ExifTag = 4;
+pub type ExifTag = ::std::os::raw::c_uint;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct ExifRational {
+    pub numerator: ::std::os::raw::c_int,
+    pub denominator: ::std::os::raw::c_int,
+}
+#[test]
+fn bindgen_test_layout_ExifRational() {
+    assert_eq!(
+        ::std::mem::size_of::<ExifRational>(),
+        8usize,
+        concat!("Size of: ", stringify!(ExifRational))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<ExifRational>(),
+        4usize,
+        concat!("Alignment of ", stringify!(ExifRational))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifRational>())).numerator as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifRational),
+            "::",
+            stringify!(numerator)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifRational>())).denominator as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifRational),
+            "::",
+            stringify!(denominator)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct ExifURational {
+    pub numerator: ::std::os::raw::c_uint,
+    pub denominator: ::std::os::raw::c_uint,
+}
+#[test]
+fn bindgen_test_layout_ExifURational() {
+    assert_eq!(
+        ::std::mem::size_of::<ExifURational>(),
+        8usize,
+        concat!("Size of: ", stringify!(ExifURational))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<ExifURational>(),
+        4usize,
+        concat!("Alignment of ", stringify!(ExifURational))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifURational>())).numerator as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifURational),
+            "::",
+            stringify!(numerator)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifURational>())).denominator as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifURational),
+            "::",
+            stringify!(denominator)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct ExifBindings {
+    pub get_uint: ::std::option::Option<
+        unsafe extern "C" fn(
+            arg1: *mut ::std::os::raw::c_void,
+            arg2: ::std::os::raw::c_uint,
+            arg3: ::std::os::raw::c_ushort,
+        ) -> ::std::os::raw::c_uint,
+    >,
+    pub get_urational: ::std::option::Option<
+        unsafe extern "C" fn(
+            arg1: *mut ::std::os::raw::c_void,
+            arg2: ::std::os::raw::c_uint,
+            arg3: ::std::os::raw::c_ushort,
+        ) -> ExifURational,
+    >,
+    pub get_rational: ::std::option::Option<
+        unsafe extern "C" fn(
+            arg1: *mut ::std::os::raw::c_void,
+            arg2: ::std::os::raw::c_uint,
+            arg3: ::std::os::raw::c_ushort,
+        ) -> ExifRational,
+    >,
+}
+#[test]
+fn bindgen_test_layout_ExifBindings() {
+    assert_eq!(
+        ::std::mem::size_of::<ExifBindings>(),
+        24usize,
+        concat!("Size of: ", stringify!(ExifBindings))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<ExifBindings>(),
+        8usize,
+        concat!("Alignment of ", stringify!(ExifBindings))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).get_uint as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(get_uint)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).get_urational as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(get_urational)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).get_rational as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(get_rational)
+        )
+    );
+}

@@ -1,4 +1,5 @@
 use crate::bindings::{Area, ImageInfoContainer};
+use crate::exif::{ExifContainer, DummyExif};
 
 use arrayvec::ArrayVec;
 use rawloader::RawImage;
@@ -12,13 +13,13 @@ pub trait RawSavableImage {
 }
 
 pub trait DNGWriting {
-    fn get_dng_writer(&self) -> DNGWriter;
+    fn get_dng_writer(&self, exif: ExifContainer) -> DNGWriter;
 }
 
 impl<T> DNGWriting for T where T: RawSavableImage {
-    fn get_dng_writer(&self) -> DNGWriter {
+    fn get_dng_writer(&self, exif: ExifContainer) -> DNGWriter {
         let (make, model) = self.get_make_model();
-        let writer = DNGWriter::new(self.get_info_container(), make, model);
+        let writer = DNGWriter::new(self.get_info_container(), exif, make, model);
         writer.build_negative(self.get_image_data());
 
         writer

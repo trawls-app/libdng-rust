@@ -1,5 +1,6 @@
 pub mod image_info;
 pub mod bindings;
+pub mod exif;
 
 use std::ffi::CString;
 use std::ffi::c_void;
@@ -7,10 +8,12 @@ use std::os::raw::c_char;
 use std::os::raw::c_ushort;
 use std::path::Path;
 use bindings::ImageInfoContainer;
+use std::ptr::null;
+use crate::exif::ExifContainer;
 
 
 extern "C" {
-    fn createConverter(image: ImageInfoContainer, make: *const c_char, model: *const c_char) -> *const c_void;
+    fn createConverter(image: ImageInfoContainer, exif_bindings: bindings::ExifBindings, exif_context: *const c_void, make: *const c_char, model: *const c_char) -> *const c_void;
     fn destroyConverter(handler: *const c_void);
     fn callDummy(handler: *const c_void);
     fn setAppName(handler: *const c_void, app_name: *const c_char, app_version: *const c_char);
@@ -22,19 +25,20 @@ extern "C" {
 
 
 pub struct DNGWriter {
-    handler: *const c_void
+    handler: *const c_void,
 }
 
 
 impl DNGWriter {
-    pub fn new(info: ImageInfoContainer, make: String, model: String) -> DNGWriter {
-        //let mut image_info = Box::new(info);
+    pub fn new(info: ImageInfoContainer, mut exif: ExifContainer, make: String, model: String) -> DNGWriter {
         let make_str = CString::new(make).unwrap();
         let model_str = CString::new(model).unwrap();
 
         unsafe {
             DNGWriter {
                 handler: createConverter( info,
+                                          bindings::ExifBindings::create(),
+                                          &mut exif as *mut exif::ExifContainer as *mut c_void,
                                           make_str.as_ptr(),
                                           model_str.as_ptr()
                 )

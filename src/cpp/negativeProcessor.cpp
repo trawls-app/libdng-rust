@@ -64,8 +64,8 @@ const char* getDngErrorMessage(int errorCode) {
 
 
 NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info,
-                                                       const char *make,
-                                                       const char *model) {
+                                                       ExifBindings exif_bindings, void *exif_context,
+                                                       const char *make, const char *model) {
     // -----------------------------------------------------------------------------------------
     // Open and parse rawfile with libraw...
 
@@ -113,16 +113,14 @@ NegativeProcessor * NegativeProcessor::createProcessor(AutoPtr<dng_host> &host, 
 //    else if (!strcmp(rawProcessor->imgdata.idata.make, "FUJIFILM"))
 //        return new FujiProcessor(host, rawProcessor.Release(), rawImage);
 
-    return new VariousVendorProcessor(host, image_info, make, model);
+    return new VariousVendorProcessor(host, image_info, exif_bindings, exif_context, make, model);
 }
 
 
-NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info, const char *make,
-                                     const char *model)
-                                   : m_host(host), image_width(image_info.width), image_height(image_info.height), rs_image(image_info), make(make), model(model) {
+NegativeProcessor::NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info, ExifBindings exif_bindings,
+                                     void *exif_context, const char *make, const char *model)
+                                   : m_host(host), image_width(image_info.width), image_height(image_info.height), rs_image(image_info), exif_bindings(exif_bindings), exif_context(exif_context), make(make), model(model) {
     m_negative.Reset(m_host->Make_dng_negative());
-    make = "TestMake";
-    model = "TestModel";
 }
 
 
@@ -712,6 +710,7 @@ bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, 
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, uint32* value) {
+    std::cout << "Exif: " << exifTagName << "[" << component << "] = " << exif_bindings.get_uint(exif_context, 0, 0) << std::endl;
     /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if ((it == m_RawExif.end()) || (it->count() < (component + 1))) return false;
 

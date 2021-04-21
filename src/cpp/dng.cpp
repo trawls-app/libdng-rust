@@ -4,8 +4,9 @@
 
 
 RawConverter *
-createConverter(ImageInfoContainer image_info, const char *make, const char *model) {
-    auto converter = new RawConverter(image_info, make, model);
+createConverter(ImageInfoContainer image_info, ExifBindings exif_bindings, void *exif_context, const char *make,
+                const char *model) {
+    auto converter = new RawConverter(image_info, exif_bindings, exif_context, make, model);
     converter->registerPublisher(_write_output);
     return converter;
 }

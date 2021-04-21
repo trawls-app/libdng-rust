@@ -20,4 +20,23 @@ typedef struct ImageInfoContainer {
     Area active_area;
 } ImageInfoContainer;
 
+enum ExifTag {
+    ExposureTime,
+    ApertureValue,
+    CameraMake,
+    CameraModel,
+    ISOSpeedValue
+};
+
+
+typedef struct ExifRational { int numerator; int denominator; } ExifRational;
+typedef struct ExifURational { unsigned int numerator; unsigned int denominator; } ExifURational;
+
+typedef struct ExifBindings {
+    unsigned int (*get_uint)(void*, unsigned int, unsigned short);
+    //const char * (*get_str)(void*, ExifTag);
+    ExifURational (*get_urational)(void*, unsigned int, unsigned short);
+    ExifRational (*get_rational)(void*, unsigned int, unsigned short);
+} ExifBindings;
+
 #endif //DNGBINDINGS_WRAPPER_H

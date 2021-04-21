@@ -18,6 +18,7 @@ path = "src/convert.rs"
 arrayvec = "0.7.0"
 version = "3.0.0"
 rawloader = "0.36.2"
+num = "0.4.0"
 
 [build-dependencies]
 cmake = "0.1.45"

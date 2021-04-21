@@ -30,8 +30,10 @@
 
 
 VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info,
-                                               const char *make, const char *model)
-                                             : NegativeProcessor(host, image_info, make, model) {}
+                                               ExifBindings exif_bindings, void *exif_context, const char *make,
+                                               const char *model)
+                                             : NegativeProcessor(host, image_info, exif_bindings, exif_context, make,
+                                                                 model) {}
 
 
 void setString(uint32 inInt, dng_string *outString) {

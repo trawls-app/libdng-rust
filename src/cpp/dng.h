@@ -10,7 +10,8 @@
 #include <dng_xmp_sdk.h>
 
 extern "C" RawConverter *
-createConverter(ImageInfoContainer image_info, const char *make, const char *model);
+createConverter(ImageInfoContainer image_info, ExifBindings exif_bindings, void *exif_context, const char *make,
+                const char *model);
 extern "C" void destroyConverter(RawConverter *handler);
 extern "C" void setAppName(RawConverter *handler, const char *app_name, const char *app_version);
 extern "C" void callDummy(RawConverter *handler);
