@@ -12,24 +12,11 @@ pub trait ExifExtractable {
 }
 
 
-pub struct DummyExif {
-    pub dummy: u32
-}
-impl ExifExtractable for DummyExif {
-    fn get_uint(&self, tag: u32, index: u16) -> Option<u32> {
-        //Some(self.dummy)
-        None
-    }
-
-    fn get_urational(&self, tag: u32, index: u16) -> Option<Ratio<u32>> {
-        //Some(Ratio::new(self.dummy, 2))
-        None
-    }
-
-    fn get_srational(&self, tag: u32, index: u16) -> Option<Ratio<i32>> {
-        //Some(Ratio::new(0 - self.dummy as i32,  2))
-        None
-    }
+pub struct EmptyExif {}
+impl ExifExtractable for EmptyExif {
+    fn get_uint(&self, tag: u32, index: u16) -> Option<u32> { None }
+    fn get_urational(&self, tag: u32, index: u16) -> Option<Ratio<u32>> { None }
+    fn get_srational(&self, tag: u32, index: u16) -> Option<Ratio<i32>> { None }
 }
 
 

@@ -1,5 +1,5 @@
 use crate::bindings::{Area, ImageInfoContainer};
-use crate::exif::{ExifBox, ExifExtractable, DummyExif};
+use crate::exif::{ExifBox, ExifExtractable, EmptyExif};
 
 use arrayvec::ArrayVec;
 use rawloader::RawImage;
@@ -37,7 +37,7 @@ impl RawSavableImage for RawImage {
 
     fn get_exif_box(&self) -> ExifBox {
         ExifBox {
-            extractable: Box::new(DummyExif { dummy: 42 })
+            extractable: Box::new(EmptyExif {})
         }
     }
 
