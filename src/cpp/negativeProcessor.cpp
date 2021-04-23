@@ -690,33 +690,28 @@ bool NegativeProcessor::getRawExifTag(const char* exifTagName, dng_date_time_inf
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, dng_srational* rational) {
-    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
-    if ((it == m_RawExif.end()) || (it->count() < (component + 1))) return false;
+    ExifRational ratio;
+    auto success = exif_bindings.get_rational(exif_context, 0, 0, &ratio);
+    std::cout << "Exif: " << exifTagName << "[" << component << "] = " << ratio.numerator << "/" << ratio.denominator  << " (" << success << ")" << std::endl;
 
-    Exiv2::Rational exiv2Rational = (*it).toRational(component);
-    *rational = dng_srational(exiv2Rational.first, exiv2Rational.second);
-    return true;*/
+    if (success) { *rational = dng_srational(ratio.numerator, ratio.denominator); return true; }
     return false;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, dng_urational* rational) {
-    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
-    if ((it == m_RawExif.end()) || (it->count() < (component + 1))) return false;
+    ExifURational ratio;
+    auto success = exif_bindings.get_urational(exif_context, 0, 0, &ratio);
+    std::cout << "Exif: " << exifTagName << "[" << component << "] = " << ratio.numerator << "/" << ratio.denominator  << " (" << success << ")" << std::endl;
 
-    Exiv2::URational exiv2Rational = (*it).toRational(component);
-    *rational = dng_urational(exiv2Rational.first, exiv2Rational.second);
-    return true;*/
+    if (success) { *rational = dng_urational(ratio.numerator, ratio.denominator); return true; }
     return false;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, uint32* value) {
-    std::cout << "Exif: " << exifTagName << "[" << component << "] = " << exif_bindings.get_uint(exif_context, 0, 0) << std::endl;
-    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
-    if ((it == m_RawExif.end()) || (it->count() < (component + 1))) return false;
+    auto success = (bool) exif_bindings.get_uint(exif_context, 0, 0, value);
+    std::cout << "Exif: " << exifTagName << "[" << component << "] = " << *value << " (" << success << ")" << std::endl;
 
-    *value = static_cast<uint32>(it->toLong(component));
-    return true;*/
-    return false;
+    return success;
 }
 
 int NegativeProcessor::getRawExifTag(const char* exifTagName, uint32* valueArray, int32 maxFill) {

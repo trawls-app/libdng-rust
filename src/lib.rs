@@ -8,8 +8,7 @@ use std::os::raw::c_char;
 use std::os::raw::c_ushort;
 use std::path::Path;
 use bindings::ImageInfoContainer;
-use std::ptr::null;
-use crate::exif::ExifContainer;
+use crate::exif::ExifBox;
 
 
 extern "C" {
@@ -29,7 +28,7 @@ pub struct DNGWriter {
 
 
 impl DNGWriter {
-    pub fn new(info: ImageInfoContainer, image_data: Vec<u16>, mut exif: ExifContainer, make: String, model: String) -> DNGWriter {
+    pub fn new(info: ImageInfoContainer, image_data: Vec<u16>, mut exif: ExifBox, make: String, model: String) -> DNGWriter {
         let make_str = CString::new(make).unwrap();
         let model_str = CString::new(model).unwrap();
         let mut data = image_data.into_boxed_slice();
@@ -39,7 +38,7 @@ impl DNGWriter {
                 handler: createConverter( info,
                                           data.as_mut_ptr(),
                                           bindings::ExifBindings::create(),
-                                          &mut exif as *mut exif::ExifContainer as *mut c_void,
+                                          &mut exif as *mut exif::ExifBox as *mut c_void,
                                           make_str.as_ptr(),
                                           model_str.as_ptr()
                 )

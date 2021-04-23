@@ -1,5 +1,5 @@
 use crate::bindings::{Area, ImageInfoContainer};
-use crate::exif::{ExifContainer, DummyExif};
+use crate::exif::{ExifBox, ExifExtractable, DummyExif};
 
 use arrayvec::ArrayVec;
 use rawloader::RawImage;
@@ -8,18 +8,23 @@ use crate::DNGWriter;
 
 pub trait RawSavableImage {
     fn get_make_model(&self) -> (String, String);
+    fn get_exif_box(&self) -> ExifBox;
     fn get_info_container(&self) -> ImageInfoContainer;
     fn get_image_data(&self) -> Vec<u16>;
 }
 
 pub trait DNGWriting {
-    fn get_dng_writer(&self, exif: ExifContainer) -> DNGWriter;
+    fn get_dng_writer(&self) -> DNGWriter;
 }
 
 impl<T> DNGWriting for T where T: RawSavableImage {
-    fn get_dng_writer(&self, exif: ExifContainer) -> DNGWriter {
+    fn get_dng_writer(&self) -> DNGWriter {
         let (make, model) = self.get_make_model();
-        let writer = DNGWriter::new(self.get_info_container(), self.get_image_data(), exif, make, model);
+        let writer = DNGWriter::new(
+            self.get_info_container(),
+            self.get_image_data(),
+            self.get_exif_box(),
+            make, model);
 
         writer
     }
@@ -28,6 +33,12 @@ impl<T> DNGWriting for T where T: RawSavableImage {
 impl RawSavableImage for RawImage {
     fn get_make_model(&self) -> (String, String) {
         (self.clean_make.clone(), self.clean_model.clone())
+    }
+
+    fn get_exif_box(&self) -> ExifBox {
+        ExifBox {
+            extractable: Box::new(DummyExif { dummy: 42 })
+        }
     }
 
     fn get_info_container(&self) -> ImageInfoContainer {

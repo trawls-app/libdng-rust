@@ -33,10 +33,10 @@ typedef struct ExifRational { int numerator; int denominator; } ExifRational;
 typedef struct ExifURational { unsigned int numerator; unsigned int denominator; } ExifURational;
 
 typedef struct ExifBindings {
-    unsigned int (*get_uint)(void*, unsigned int, unsigned short);
+    unsigned int (*get_uint)(void*, unsigned int, unsigned short, unsigned int*);
     //const char * (*get_str)(void*, ExifTag);
-    ExifURational (*get_urational)(void*, unsigned int, unsigned short);
-    ExifRational (*get_rational)(void*, unsigned int, unsigned short);
+    unsigned int (*get_urational)(void*, unsigned int, unsigned short, ExifURational*);
+    unsigned int (*get_rational)(void*, unsigned int, unsigned short, ExifRational*);
 } ExifBindings;
 
 #endif //DNGBINDINGS_WRAPPER_H

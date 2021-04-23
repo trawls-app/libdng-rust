@@ -244,6 +244,7 @@ pub struct ExifBindings {
             arg1: *mut ::std::os::raw::c_void,
             arg2: ::std::os::raw::c_uint,
             arg3: ::std::os::raw::c_ushort,
+            arg4: *mut ::std::os::raw::c_uint,
         ) -> ::std::os::raw::c_uint,
     >,
     pub get_urational: ::std::option::Option<
@@ -251,14 +252,16 @@ pub struct ExifBindings {
             arg1: *mut ::std::os::raw::c_void,
             arg2: ::std::os::raw::c_uint,
             arg3: ::std::os::raw::c_ushort,
-        ) -> ExifURational,
+            arg4: *mut ExifURational,
+        ) -> ::std::os::raw::c_uint,
     >,
     pub get_rational: ::std::option::Option<
         unsafe extern "C" fn(
             arg1: *mut ::std::os::raw::c_void,
             arg2: ::std::os::raw::c_uint,
             arg3: ::std::os::raw::c_ushort,
-        ) -> ExifRational,
+            arg4: *mut ExifRational,
+        ) -> ::std::os::raw::c_uint,
     >,
 }
 #[test]

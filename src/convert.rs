@@ -2,7 +2,7 @@ use std::env;
 use rawloader;
 use std::path::Path;
 
-use libdng::exif::{ExifContainer, DummyExif};
+use libdng::exif::{ExifBox, DummyExif};
 use libdng::image_info::DNGWriting;
 
 
@@ -19,13 +19,11 @@ fn main() {
     let file_out_dng = file_out.to_owned() + ".dng";
 
     println!("Converting '{}' to '{}' and '{}'", file_in, file_out_jpg, file_out_dng);
-    let exif = ExifContainer {
-        extractable: Box::new(DummyExif { dummy: 123 }),
-        //extractable: DummyExif { dummy: 123 },
-        dummy_num: 42
+    let exif = ExifBox {
+        extractable: Box::new(DummyExif { dummy: 456 }),
     };
     let image = rawloader::decode_file(file_in).unwrap();
-    let writer = image.get_dng_writer(exif);
+    let writer = image.get_dng_writer();
 
     println!("Make: '{}',\tModel: '{}'", image.clean_make, image.clean_model);
     println!("Width: {},\tHeight: {}", image.width, image.height);
