@@ -19,8 +19,7 @@ pub trait DNGWriting {
 impl<T> DNGWriting for T where T: RawSavableImage {
     fn get_dng_writer(&self, exif: ExifContainer) -> DNGWriter {
         let (make, model) = self.get_make_model();
-        let writer = DNGWriter::new(self.get_info_container(), exif, make, model);
-        writer.build_negative(self.get_image_data());
+        let writer = DNGWriter::new(self.get_info_container(), self.get_image_data(), exif, make, model);
 
         writer
     }

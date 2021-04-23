@@ -59,21 +59,23 @@ unsafe extern "C" fn exif_get_uint(container: *mut c_void, tag: ExifTag, index: 
 
 
 unsafe extern "C" fn exif_get_uratio(container: *mut c_void, tag: ExifTag, index: c_ushort) -> ExifURational {
-    let cn = &*(container as *mut ExifContainer);
+    /*let cn = &*(container as *mut ExifContainer);
     let val = cn.extractable.get_urational(tag, index);
 
     ExifURational {
         numerator: *val.numer(),
         denominator: *val.denom()
-    }
+    }*/
+    ExifURational {numerator: 1, denominator: 1}
 }
 
 unsafe extern "C" fn exif_get_sratio(container: *mut c_void, tag: ExifTag, index: c_ushort) -> ExifRational {
-    let cn = &*(container as *mut ExifContainer);
+    /*let cn = &*(container as *mut ExifContainer);
     let val = cn.extractable.get_srational(tag, index);
 
     ExifRational {
         numerator: *val.numer(),
         denominator: *val.denom()
-    }
+    }*/
+    ExifRational { numerator: 1, denominator: 1}
 }
