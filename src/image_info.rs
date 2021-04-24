@@ -1,5 +1,5 @@
 use crate::bindings::{Area, ImageInfoContainer};
-use crate::exif::{ExifBox, ExifExtractable, EmptyExif};
+use crate::exif::{ExifBox, EmptyExif};
 
 use arrayvec::ArrayVec;
 use rawloader::RawImage;

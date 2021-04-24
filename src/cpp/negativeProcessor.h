@@ -58,17 +58,17 @@ protected:
    // helper functions
    bool getInterpretedRawExifTag(const char* exifTagName, int32 component, uint32* value);
 
-   bool getRawExifTag(const char* exifTagName, dng_string* value);
-   bool getRawExifTag(const char* exifTagName, dng_date_time_info* value);
-   bool getRawExifTag(const char* exifTagName, int32 component, dng_srational* rational);
-   bool getRawExifTag(const char* exifTagName, int32 component, dng_urational* rational);
-   bool getRawExifTag(const char* exifTagName, int32 component, uint32* value);
+   bool getRawExifTag(ExifTag exifTag, dng_string* value);
+   bool getRawExifTag(ExifTag exifTag, dng_date_time_info* value);
+   bool getRawExifTag(ExifTag exifTag, int32 component, dng_srational* rational);
+   bool getRawExifTag(ExifTag exifTag, int32 component, dng_urational* rational);
+   bool getRawExifTag(ExifTag exifTag, int32 component, uint32* value);
 
-   int  getRawExifTag(const char* exifTagName, uint32* valueArray, int32 maxFill);
-   int  getRawExifTag(const char* exifTagName, int16* valueArray, int32 maxFill);
-   int  getRawExifTag(const char* exifTagName, dng_urational* valueArray, int32 maxFill);
+   int  getRawExifTag(ExifTag exifTag, uint32* valueArray, int32 maxFill);
+   int  getRawExifTag(ExifTag exifTag, int16* valueArray, int32 maxFill);
+   int  getRawExifTag(ExifTag exifTag, dng_urational* valueArray, int32 maxFill);
 
-   bool getRawExifTag(const char* exifTagName, long* size, unsigned char** data);
+   bool getRawExifTag(ExifTag exifTag, long* size, unsigned char** data);
 
    unsigned short int image_width, image_height;
    std::string make, model;

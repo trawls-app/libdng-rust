@@ -3,14 +3,13 @@ use num::rational::Ratio;
 
 use crate::bindings::{ExifBindings, ExifRational, ExifURational, ExifTag};
 use std::ffi::{c_void, CString};
-use std::ptr::null;
 
 
 pub trait ExifExtractable {
     fn get_uint(&self, tag: ExifTag, index: u16) -> Option<u32>;
     fn get_urational(&self, tag: ExifTag, index: u16) -> Option<Ratio<u32>>;
     fn get_srational(&self, tag: ExifTag, index: u16) -> Option<Ratio<i32>>;
-    fn get_string(&self, tag: ExifTag) -> Option<&str>;
+    fn get_string(&self, tag: ExifTag) -> Option<String>;
 }
 
 
@@ -19,7 +18,7 @@ impl ExifExtractable for EmptyExif {
     fn get_uint(&self, tag: u32, index: u16) -> Option<u32> { None }
     fn get_urational(&self, tag: u32, index: u16) -> Option<Ratio<u32>> { None }
     fn get_srational(&self, tag: u32, index: u16) -> Option<Ratio<i32>> { None }
-    fn get_string(&self, tag: u32) -> Option<&str> { None }
+    fn get_string(&self, tag: u32) -> Option<String> { None }
 }
 
 

@@ -265,7 +265,7 @@ void NegativeProcessor::setCameraProfile(const char *dcpFilename) {
             for (int j = 0; j < 3; j++)
                 (*colormatrix1)[i][j] = rs_image.xyz_to_cam[i][j];
         prof->SetColorMatrix1(*colormatrix1);
-        prof->SetProfileCalibrationSignature("de.croaxeldyphic.dng-rs");
+        prof->SetProfileCalibrationSignature("de.croaxeldyphic.dngrs");
     }
 
     m_negative->AddProfile(prof);
@@ -277,35 +277,36 @@ void NegativeProcessor::setExifFromRaw(const dng_date_time_info &dateTimeNow, co
 
     // -----------------------------------------------------------------------------------------
     // TIFF 6.0 "D. Other Tags"
-    getRawExifTag("Exif.Image.DateTime", &negExif->fDateTime);
-    getRawExifTag("Exif.Image.ImageDescription", &negExif->fImageDescription);
-    getRawExifTag("Exif.Image.Make", &negExif->fMake);
-    getRawExifTag("Exif.Image.Model", &negExif->fModel);
-    getRawExifTag("Exif.Image.Software", &negExif->fSoftware);
-    getRawExifTag("Exif.Image.Artist", &negExif->fArtist);
-    getRawExifTag("Exif.Image.Copyright", &negExif->fCopyright);
+    getRawExifTag(ExifTag::Image_DateTime, &negExif->fDateTime);
+    getRawExifTag(ExifTag::Image_ImageDescription, &negExif->fImageDescription);
+    getRawExifTag(ExifTag::Image_Make, &negExif->fMake);
+    getRawExifTag(ExifTag::Image_Model, &negExif->fModel);
+    getRawExifTag(ExifTag::Image_Software, &negExif->fSoftware);
+    getRawExifTag(ExifTag::Image_Artist, &negExif->fArtist);
+    getRawExifTag(ExifTag::Image_Copyright, &negExif->fCopyright);
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3 "A. Tags Relating to Version" (order as in spec)
-    getRawExifTag("Exif.Photo.ExifVersion", 0, &negExif->fExifVersion);
+    getRawExifTag(ExifTag::Photo_ExifVersion, 0, &negExif->fExifVersion);
     // Exif.Photo.FlashpixVersion - fFlashPixVersion : ignoring this here
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3 "B. Tags Relating to Image data Characteristics" (order as in spec)
-    getRawExifTag("Exif.Photo.ColorSpace", 0, &negExif->fColorSpace);
+    getRawExifTag(ExifTag::Photo_ColorSpace, 0, &negExif->fColorSpace);
     // Gamma : Supported by DNG SDK (fGamma) but not Exiv2 (v0.24)
+    getRawExifTag(ExifTag::Photo_Gamma, 0, &negExif->fGamma);
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3 "C. Tags Relating To Image Configuration" (order as in spec)
-    getRawExifTag("Exif.Photo.ComponentsConfiguration", 0, &negExif->fComponentsConfiguration);
-    getRawExifTag("Exif.Photo.CompressedBitsPerPixel", 0, &negExif->fCompresssedBitsPerPixel);  // nice typo in DNG SDK...
-    getRawExifTag("Exif.Photo.PixelXDimension", 0, &negExif->fPixelXDimension);
-    getRawExifTag("Exif.Photo.PixelYDimension", 0, &negExif->fPixelYDimension);
+    getRawExifTag(ExifTag::Photo_ComponentsConfiguration, 0, &negExif->fComponentsConfiguration);
+    getRawExifTag(ExifTag::Photo_CompressedBitsPerPixel, 0, &negExif->fCompresssedBitsPerPixel);  // nice typo in DNG SDK...
+    getRawExifTag(ExifTag::Photo_PixelXDimension, 0, &negExif->fPixelXDimension);
+    getRawExifTag(ExifTag::Photo_PixelYDimension, 0, &negExif->fPixelYDimension);
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3 "D. Tags Relating to User Information" (order as in spec)
     // MakerNote: We'll deal with that below
-    getRawExifTag("Exif.Photo.UserComment", &negExif->fUserComment);
+    getRawExifTag(ExifTag::Photo_UserComment, &negExif->fUserComment);
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3 "E. Tags Relating to Related File Information" (order as in spec)
@@ -313,112 +314,112 @@ void NegativeProcessor::setExifFromRaw(const dng_date_time_info &dateTimeNow, co
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3 "F. Tags Relating to Date and Time" (order as in spec)
-    getRawExifTag("Exif.Photo.DateTimeOriginal", &negExif->fDateTimeOriginal);
-    getRawExifTag("Exif.Photo.DateTimeDigitized", &negExif->fDateTimeDigitized);
+    getRawExifTag(ExifTag::Photo_DateTimeOriginal, &negExif->fDateTimeOriginal);
+    getRawExifTag(ExifTag::Photo_DateTimeDigitized, &negExif->fDateTimeDigitized);
     // SubSecTime          : DNG SDK doesn't support this
     // SubSecTimeOriginal  : DNG SDK doesn't support this
     // SubSecTimeDigitized : DNG SDK doesn't support this
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3 "G. Tags Relating to Picture-Taking Conditions" (order as in spec)
-    getRawExifTag("Exif.Photo.ExposureTime", 0, &negExif->fExposureTime);
-    getRawExifTag("Exif.Photo.FNumber", 0, &negExif->fFNumber);
-    getRawExifTag("Exif.Photo.ExposureProgram", 0, &negExif->fExposureProgram);
+    getRawExifTag(ExifTag::Photo_ExposureTime, 0, &negExif->fExposureTime);
+    getRawExifTag(ExifTag::Photo_FNumber, 0, &negExif->fFNumber);
+    getRawExifTag(ExifTag::Photo_ExposureProgram, 0, &negExif->fExposureProgram);
     // SpectralSensitivity : DNG SDK doesn't support this
-    getRawExifTag("Exif.Photo.ISOSpeedRatings", negExif->fISOSpeedRatings, 3); // PhotographicSensitivity in Exif 2.3
+    getRawExifTag(ExifTag::Photo_ISOSpeedRatings, negExif->fISOSpeedRatings, 3); // PhotographicSensitivity in Exif 2.3
     // OECF : DNG SDK doesn't support this
-    getRawExifTag("Exif.Photo.SensitivityType", 0, &negExif->fSensitivityType);
-    getRawExifTag("Exif.Photo.StandardOutputSensitivity", 0, &negExif->fStandardOutputSensitivity);
-    getRawExifTag("Exif.Photo.RecommendedExposureIndex", 0, &negExif->fRecommendedExposureIndex);
-    getRawExifTag("Exif.Photo.ISOSpeed", 0, &negExif->fISOSpeed);
-    getRawExifTag("Exif.Photo.ISOSpeedLatitudeyyy", 0, &negExif->fISOSpeedLatitudeyyy);
-    getRawExifTag("Exif.Photo.ISOSpeedLatitudezzz", 0, &negExif->fISOSpeedLatitudezzz);
-    getRawExifTag("Exif.Photo.ShutterSpeedValue", 0, &negExif->fShutterSpeedValue);
-    getRawExifTag("Exif.Photo.ApertureValue", 0, &negExif->fApertureValue);
-    getRawExifTag("Exif.Photo.BrightnessValue", 0, &negExif->fBrightnessValue);
-    getRawExifTag("Exif.Photo.ExposureBiasValue", 0, &negExif->fExposureBiasValue);
-    getRawExifTag("Exif.Photo.MaxApertureValue", 0, &negExif->fMaxApertureValue);
-    getRawExifTag("Exif.Photo.SubjectDistance", 0, &negExif->fSubjectDistance);
-    getRawExifTag("Exif.Photo.MeteringMode", 0, &negExif->fMeteringMode);
-    getRawExifTag("Exif.Photo.LightSource", 0, &negExif->fLightSource);
-    getRawExifTag("Exif.Photo.Flash", 0, &negExif->fFlash);
-    getRawExifTag("Exif.Photo.FocalLength", 0, &negExif->fFocalLength);
-    negExif->fSubjectAreaCount = getRawExifTag("Exif.Photo.SubjectArea", negExif->fSubjectArea, 4);
+    getRawExifTag(ExifTag::Photo_SensitivityType, 0, &negExif->fSensitivityType);
+    getRawExifTag(ExifTag::Photo_StandardOutputSensitivity, 0, &negExif->fStandardOutputSensitivity);
+    getRawExifTag(ExifTag::Photo_RecommendedExposureIndex, 0, &negExif->fRecommendedExposureIndex);
+    getRawExifTag(ExifTag::Photo_ISOSpeed, 0, &negExif->fISOSpeed);
+    getRawExifTag(ExifTag::Photo_ISOSpeedLatitudeyyy, 0, &negExif->fISOSpeedLatitudeyyy);
+    getRawExifTag(ExifTag::Photo_ISOSpeedLatitudezzz, 0, &negExif->fISOSpeedLatitudezzz);
+    getRawExifTag(ExifTag::Photo_ShutterSpeedValue, 0, &negExif->fShutterSpeedValue);
+    getRawExifTag(ExifTag::Photo_ApertureValue, 0, &negExif->fApertureValue);
+    getRawExifTag(ExifTag::Photo_BrightnessValue, 0, &negExif->fBrightnessValue);
+    getRawExifTag(ExifTag::Photo_ExposureBiasValue, 0, &negExif->fExposureBiasValue);
+    getRawExifTag(ExifTag::Photo_MaxApertureValue, 0, &negExif->fMaxApertureValue);
+    getRawExifTag(ExifTag::Photo_SubjectDistance, 0, &negExif->fSubjectDistance);
+    getRawExifTag(ExifTag::Photo_MeteringMode, 0, &negExif->fMeteringMode);
+    getRawExifTag(ExifTag::Photo_LightSource, 0, &negExif->fLightSource);
+    getRawExifTag(ExifTag::Photo_Flash, 0, &negExif->fFlash);
+    getRawExifTag(ExifTag::Photo_FocalLength, 0, &negExif->fFocalLength);
+    negExif->fSubjectAreaCount = getRawExifTag(ExifTag::Photo_SubjectArea, negExif->fSubjectArea, 4);
     // FlashEnergy : DNG SDK doesn't support this
     // SpatialFrequencyResponse : DNG SDK doesn't support this
-    getRawExifTag("Exif.Photo.FocalPlaneXResolution", 0, &negExif->fFocalPlaneXResolution);
-    getRawExifTag("Exif.Photo.FocalPlaneYResolution", 0, &negExif->fFocalPlaneYResolution);
-    getRawExifTag("Exif.Photo.FocalPlaneResolutionUnit", 0, &negExif->fFocalPlaneResolutionUnit);
+    getRawExifTag(ExifTag::Photo_FocalPlaneXResolution, 0, &negExif->fFocalPlaneXResolution);
+    getRawExifTag(ExifTag::Photo_FocalPlaneYResolution, 0, &negExif->fFocalPlaneYResolution);
+    getRawExifTag(ExifTag::Photo_FocalPlaneResolutionUnit, 0, &negExif->fFocalPlaneResolutionUnit);
     // SubjectLocation : DNG SDK doesn't support this
-    getRawExifTag("Exif.Photo.ExposureIndex", 0, &negExif->fExposureIndex);
-    getRawExifTag("Exif.Photo.SensingMethod", 0, &negExif->fSensingMethod);
-    getRawExifTag("Exif.Photo.FileSource", 0, &negExif->fFileSource);
-    getRawExifTag("Exif.Photo.SceneType", 0, &negExif->fSceneType);
+    getRawExifTag(ExifTag::Photo_ExposureIndex, 0, &negExif->fExposureIndex);
+    getRawExifTag(ExifTag::Photo_SensingMethod, 0, &negExif->fSensingMethod);
+    getRawExifTag(ExifTag::Photo_FileSource, 0, &negExif->fFileSource);
+    getRawExifTag(ExifTag::Photo_SceneType, 0, &negExif->fSceneType);
     // CFAPattern: we write it manually from raw data further below
-    getRawExifTag("Exif.Photo.CustomRendered", 0, &negExif->fCustomRendered);
-    getRawExifTag("Exif.Photo.ExposureMode", 0, &negExif->fExposureMode);
-    getRawExifTag("Exif.Photo.WhiteBalance", 0, &negExif->fWhiteBalance);
-    getRawExifTag("Exif.Photo.DigitalZoomRatio", 0, &negExif->fDigitalZoomRatio);
-    getRawExifTag("Exif.Photo.FocalLengthIn35mmFilm", 0, &negExif->fFocalLengthIn35mmFilm);
-    getRawExifTag("Exif.Photo.SceneCaptureType", 0, &negExif->fSceneCaptureType);
-    getRawExifTag("Exif.Photo.GainControl", 0, &negExif->fGainControl);
-    getRawExifTag("Exif.Photo.Contrast", 0, &negExif->fContrast);
-    getRawExifTag("Exif.Photo.Saturation", 0, &negExif->fSaturation);
-    getRawExifTag("Exif.Photo.Sharpness", 0, &negExif->fSharpness);
+    getRawExifTag(ExifTag::Photo_CustomRendered, 0, &negExif->fCustomRendered);
+    getRawExifTag(ExifTag::Photo_ExposureMode, 0, &negExif->fExposureMode);
+    getRawExifTag(ExifTag::Photo_WhiteBalance, 0, &negExif->fWhiteBalance);
+    getRawExifTag(ExifTag::Photo_DigitalZoomRatio, 0, &negExif->fDigitalZoomRatio);
+    getRawExifTag(ExifTag::Photo_FocalLengthIn35mmFilm, 0, &negExif->fFocalLengthIn35mmFilm);
+    getRawExifTag(ExifTag::Photo_SceneCaptureType, 0, &negExif->fSceneCaptureType);
+    getRawExifTag(ExifTag::Photo_GainControl, 0, &negExif->fGainControl);
+    getRawExifTag(ExifTag::Photo_Contrast, 0, &negExif->fContrast);
+    getRawExifTag(ExifTag::Photo_Saturation, 0, &negExif->fSaturation);
+    getRawExifTag(ExifTag::Photo_Sharpness, 0, &negExif->fSharpness);
     // DeviceSettingsDescription : DNG SDK doesn't support this
-    getRawExifTag("Exif.Photo.SubjectDistanceRange", 0, &negExif->fSubjectDistanceRange);
+    getRawExifTag(ExifTag::Photo_SubjectDistanceRange, 0, &negExif->fSubjectDistanceRange);
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3 "H. Other Tags" (order as in spec)
     // ImageUniqueID : DNG SDK doesn't support this
-    getRawExifTag("Exif.Photo.CameraOwnerName", &negExif->fOwnerName);
-    getRawExifTag("Exif.Photo.BodySerialNumber", &negExif->fCameraSerialNumber);
-    getRawExifTag("Exif.Photo.LensSpecification", negExif->fLensInfo, 4);
-    getRawExifTag("Exif.Photo.LensMake", &negExif->fLensMake);
-    getRawExifTag("Exif.Photo.LensModel", &negExif->fLensName);
-    getRawExifTag("Exif.Photo.LensSerialNumber", &negExif->fLensSerialNumber);
+    getRawExifTag(ExifTag::Photo_CameraOwnerName, &negExif->fOwnerName);
+    getRawExifTag(ExifTag::Photo_BodySerialNumber, &negExif->fCameraSerialNumber);
+    getRawExifTag(ExifTag::Photo_LensSpecification, negExif->fLensInfo, 4);
+    getRawExifTag(ExifTag::Photo_LensMake, &negExif->fLensMake);
+    getRawExifTag(ExifTag::Photo_LensModel, &negExif->fLensName);
+    getRawExifTag(ExifTag::Photo_LensSerialNumber, &negExif->fLensSerialNumber);
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3 GPS "A. Tags Relating to GPS" (order as in spec)
     uint32 gpsVer[4];  gpsVer[0] = gpsVer[1] = gpsVer[2] = gpsVer[3] = 0;
-    getRawExifTag("Exif.GPSInfo.GPSVersionID", gpsVer, 4);
+    getRawExifTag(ExifTag::GPSInfo_GPSVersionID, gpsVer, 4);
     negExif->fGPSVersionID = (gpsVer[0] << 24) + (gpsVer[1] << 16) + (gpsVer[2] <<  8) + gpsVer[3];
-    getRawExifTag("Exif.GPSInfo.GPSLatitudeRef", &negExif->fGPSLatitudeRef);
-    getRawExifTag("Exif.GPSInfo.GPSLatitude", negExif->fGPSLatitude, 3);
-    getRawExifTag("Exif.GPSInfo.GPSLongitudeRef", &negExif->fGPSLongitudeRef);
-    getRawExifTag("Exif.GPSInfo.GPSLongitude", negExif->fGPSLongitude, 3);
-    getRawExifTag("Exif.GPSInfo.GPSAltitudeRef", 0, &negExif->fGPSAltitudeRef);
-    getRawExifTag("Exif.GPSInfo.GPSAltitude", 0, &negExif->fGPSAltitude);
-    getRawExifTag("Exif.GPSInfo.GPSTimeStamp", negExif->fGPSTimeStamp, 3);
-    getRawExifTag("Exif.GPSInfo.GPSSatellites", &negExif->fGPSSatellites);
-    getRawExifTag("Exif.GPSInfo.GPSStatus", &negExif->fGPSStatus);
-    getRawExifTag("Exif.GPSInfo.GPSMeasureMode", &negExif->fGPSMeasureMode);
-    getRawExifTag("Exif.GPSInfo.GPSDOP", 0, &negExif->fGPSDOP);
-    getRawExifTag("Exif.GPSInfo.GPSSpeedRef", &negExif->fGPSSpeedRef);
-    getRawExifTag("Exif.GPSInfo.GPSSpeed", 0, &negExif->fGPSSpeed);
-    getRawExifTag("Exif.GPSInfo.GPSTrackRef", &negExif->fGPSTrackRef);
-    getRawExifTag("Exif.GPSInfo.GPSTrack", 0, &negExif->fGPSTrack);
-    getRawExifTag("Exif.GPSInfo.GPSImgDirectionRef", &negExif->fGPSImgDirectionRef);
-    getRawExifTag("Exif.GPSInfo.GPSImgDirection", 0, &negExif->fGPSImgDirection);
-    getRawExifTag("Exif.GPSInfo.GPSMapDatum", &negExif->fGPSMapDatum);
-    getRawExifTag("Exif.GPSInfo.GPSDestLatitudeRef", &negExif->fGPSDestLatitudeRef);
-    getRawExifTag("Exif.GPSInfo.GPSDestLatitude", negExif->fGPSDestLatitude, 3);
-    getRawExifTag("Exif.GPSInfo.GPSDestLongitudeRef", &negExif->fGPSDestLongitudeRef);
-    getRawExifTag("Exif.GPSInfo.GPSDestLongitude", negExif->fGPSDestLongitude, 3);
-    getRawExifTag("Exif.GPSInfo.GPSDestBearingRef", &negExif->fGPSDestBearingRef);
-    getRawExifTag("Exif.GPSInfo.GPSDestBearing", 0, &negExif->fGPSDestBearing);
-    getRawExifTag("Exif.GPSInfo.GPSDestDistanceRef", &negExif->fGPSDestDistanceRef);
-    getRawExifTag("Exif.GPSInfo.GPSDestDistance", 0, &negExif->fGPSDestDistance);
-    getRawExifTag("Exif.GPSInfo.GPSProcessingMethod", &negExif->fGPSProcessingMethod);
-    getRawExifTag("Exif.GPSInfo.GPSAreaInformation", &negExif->fGPSAreaInformation);
-    getRawExifTag("Exif.GPSInfo.GPSDateStamp", &negExif->fGPSDateStamp);
-    getRawExifTag("Exif.GPSInfo.GPSDifferential", 0, &negExif->fGPSDifferential);
+    getRawExifTag(ExifTag::GPSInfo_GPSLatitudeRef, &negExif->fGPSLatitudeRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSLatitude, negExif->fGPSLatitude, 3);
+    getRawExifTag(ExifTag::GPSInfo_GPSLongitudeRef, &negExif->fGPSLongitudeRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSLongitude, negExif->fGPSLongitude, 3);
+    getRawExifTag(ExifTag::GPSInfo_GPSAltitudeRef, 0, &negExif->fGPSAltitudeRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSAltitude, 0, &negExif->fGPSAltitude);
+    getRawExifTag(ExifTag::GPSInfo_GPSTimeStamp, negExif->fGPSTimeStamp, 3);
+    getRawExifTag(ExifTag::GPSInfo_GPSSatellites, &negExif->fGPSSatellites);
+    getRawExifTag(ExifTag::GPSInfo_GPSStatus, &negExif->fGPSStatus);
+    getRawExifTag(ExifTag::GPSInfo_GPSMeasureMode, &negExif->fGPSMeasureMode);
+    getRawExifTag(ExifTag::GPSInfo_GPSDOP, 0, &negExif->fGPSDOP);
+    getRawExifTag(ExifTag::GPSInfo_GPSSpeedRef, &negExif->fGPSSpeedRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSSpeed, 0, &negExif->fGPSSpeed);
+    getRawExifTag(ExifTag::GPSInfo_GPSTrackRef, &negExif->fGPSTrackRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSTrack, 0, &negExif->fGPSTrack);
+    getRawExifTag(ExifTag::GPSInfo_GPSImgDirectionRef, &negExif->fGPSImgDirectionRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSImgDirection, 0, &negExif->fGPSImgDirection);
+    getRawExifTag(ExifTag::GPSInfo_GPSMapDatum, &negExif->fGPSMapDatum);
+    getRawExifTag(ExifTag::GPSInfo_GPSDestLatitudeRef, &negExif->fGPSDestLatitudeRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSDestLatitude, negExif->fGPSDestLatitude, 3);
+    getRawExifTag(ExifTag::GPSInfo_GPSDestLongitudeRef, &negExif->fGPSDestLongitudeRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSDestLongitude, negExif->fGPSDestLongitude, 3);
+    getRawExifTag(ExifTag::GPSInfo_GPSDestBearingRef, &negExif->fGPSDestBearingRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSDestBearing, 0, &negExif->fGPSDestBearing);
+    getRawExifTag(ExifTag::GPSInfo_GPSDestDistanceRef, &negExif->fGPSDestDistanceRef);
+    getRawExifTag(ExifTag::GPSInfo_GPSDestDistance, 0, &negExif->fGPSDestDistance);
+    getRawExifTag(ExifTag::GPSInfo_GPSProcessingMethod, &negExif->fGPSProcessingMethod);
+    getRawExifTag(ExifTag::GPSInfo_GPSAreaInformation, &negExif->fGPSAreaInformation);
+    getRawExifTag(ExifTag::GPSInfo_GPSDateStamp, &negExif->fGPSDateStamp);
+    getRawExifTag(ExifTag::GPSInfo_GPSDifferential, 0, &negExif->fGPSDifferential);
     // GPSHPositioningError : Supported by DNG SDK (fGPSHPositioningError) but not Exiv2 (v0.24)
 
     // -----------------------------------------------------------------------------------------
     // Exif 2.3, Interoperability IFD "A. Attached Information Related to Interoperability"
-    getRawExifTag("Exif.Iop.InteroperabilityIndex", &negExif->fInteroperabilityIndex);
-    getRawExifTag("Exif.Iop.InteroperabilityVersion", 0, &negExif->fInteroperabilityVersion); // this is not in the Exif standard but in DNG SDK and Exiv2
+    getRawExifTag(ExifTag::Iop_InteroperabilityIndex, &negExif->fInteroperabilityIndex);
+    getRawExifTag(ExifTag::Iop_InteroperabilityVersion, 0, &negExif->fInteroperabilityVersion); // this is not in the Exif standard but in DNG SDK and Exiv2
 
 /*  Fields in the DNG SDK Exif structure that we are ignoring here. Some could potentially be 
     read through Exiv2 but are not part of the Exif standard so we leave them out:
@@ -517,9 +518,9 @@ dng_memory_stream* NegativeProcessor::createDNGPrivateTag() {
     long mnLength = 0;
     unsigned char* mnBuffer = 0;
 
-    if (getRawExifTag("Exif.MakerNote.Offset", 0, &mnOffset) &&
-        getRawExifTag("Exif.MakerNote.ByteOrder", &mnByteOrder) &&
-        getRawExifTag("Exif.Photo.MakerNote", &mnLength, &mnBuffer)) {
+    if (getRawExifTag(ExifTag::MakerNote_Offset, 0, &mnOffset) &&
+        getRawExifTag(ExifTag::MakerNote_ByteOrder, &mnByteOrder) &&
+        getRawExifTag(ExifTag::Photo_MakerNote, &mnLength, &mnBuffer)) {
         bool padding = (mnLength & 0x01) == 0x01;
 
         dng_memory_stream *streamPriv = new dng_memory_stream(m_host->Allocator());
@@ -671,11 +672,11 @@ bool NegativeProcessor::getInterpretedRawExifTag(const char* exifTagName, int32 
     return false;
 }
 
-bool NegativeProcessor::getRawExifTag(const char* exifTagName, dng_string* value) {
-    char * str = exif_bindings.get_string(exif_context, 0);
+bool NegativeProcessor::getRawExifTag(ExifTag exifTag, dng_string* value) {
+    char * str = exif_bindings.get_string(exif_context, exifTag);
     bool success = (str != nullptr);
 
-    std::cout << "Exif: " << exifTagName << " = '";
+    std::cout << "Exif: " << exifTag << " = '";
 
     if (success) {
         std::cout << str;
@@ -689,11 +690,11 @@ bool NegativeProcessor::getRawExifTag(const char* exifTagName, dng_string* value
     return success;
 }
 
-bool NegativeProcessor::getRawExifTag(const char* exifTagName, dng_date_time_info* value) {
-    char * str = exif_bindings.get_string(exif_context, 0);
+bool NegativeProcessor::getRawExifTag(ExifTag exifTag, dng_date_time_info* value) {
+    char * str = exif_bindings.get_string(exif_context, exifTag);
     bool success = (str != nullptr);
 
-    std::cout << "Exif: " << exifTagName << " = Date('";
+    std::cout << "Exif: " << exifTag << " = Date('";
 
     if (success) {
         std::cout << str;
@@ -709,67 +710,60 @@ bool NegativeProcessor::getRawExifTag(const char* exifTagName, dng_date_time_inf
     return success;
 }
 
-bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, dng_srational* rational) {
+bool NegativeProcessor::getRawExifTag(ExifTag exifTag, int32 component, dng_srational* rational) {
     ExifRational ratio;
-    auto success = exif_bindings.get_rational(exif_context, 0, 0, &ratio);
-    std::cout << "Exif: " << exifTagName << "[" << component << "] = " << ratio.numerator << "/" << ratio.denominator  << " (" << success << ")" << std::endl;
+    auto success = exif_bindings.get_rational(exif_context, exifTag, component, &ratio);
+    std::cout << "Exif: " << exifTag << "[" << component << "] = " << ratio.numerator << "/" << ratio.denominator << " (" << success << ")" << std::endl;
 
     if (success) { *rational = dng_srational(ratio.numerator, ratio.denominator); return true; }
     return false;
 }
 
-bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, dng_urational* rational) {
+bool NegativeProcessor::getRawExifTag(ExifTag exifTag, int32 component, dng_urational* rational) {
     ExifURational ratio;
-    auto success = exif_bindings.get_urational(exif_context, 0, 0, &ratio);
-    std::cout << "Exif: " << exifTagName << "[" << component << "] = " << ratio.numerator << "/" << ratio.denominator  << " (" << success << ")" << std::endl;
+    auto success = exif_bindings.get_urational(exif_context, exifTag, component, &ratio);
+    std::cout << "Exif: " << exifTag << "[" << component << "] = " << ratio.numerator << "/" << ratio.denominator << " (" << success << ")" << std::endl;
 
     if (success) { *rational = dng_urational(ratio.numerator, ratio.denominator); return true; }
     return false;
 }
 
-bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, uint32* value) {
-    auto success = (bool) exif_bindings.get_uint(exif_context, 0, 0, value);
-    std::cout << "Exif: " << exifTagName << "[" << component << "] = " << *value << " (" << success << ")" << std::endl;
+bool NegativeProcessor::getRawExifTag(ExifTag exifTag, int32 component, uint32* value) {
+    auto success = (bool) exif_bindings.get_uint(exif_context, exifTag, component, value);
+    std::cout << "Exif: " << exifTag << "[" << component << "] = " << *value << " (" << success << ")" << std::endl;
 
     return success;
 }
 
-int NegativeProcessor::getRawExifTag(const char* exifTagName, uint32* valueArray, int32 maxFill) {
-    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
-    if (it == m_RawExif.end()) return 0;
+int NegativeProcessor::getRawExifTag(ExifTag exifTag, uint32* valueArray, int32 maxFill) {
+    int i = 0;
+    for (; i < maxFill; i++) {
+        uint32 v;
+        auto success = this->getRawExifTag(exifTag, i, &v);
+        if (!success) break;
 
-    int lengthToFill = std::min(maxFill, static_cast<int32>(it->count()));
-    for (int i = 0; i < lengthToFill; i++)
-        valueArray[i] = static_cast<uint32>(it->toLong(i));
-    return lengthToFill;*/
-    return 0;
-}
-
-int NegativeProcessor::getRawExifTag(const char* exifTagName, int16* valueArray, int32 maxFill) {
-    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
-    if (it == m_RawExif.end()) return 0;
-
-    int lengthToFill = std::min(maxFill, static_cast<int32>(it->count()));
-    for (int i = 0; i < lengthToFill; i++)
-        valueArray[i] = static_cast<int16>(it->toLong(i));
-    return lengthToFill;*/
-    return 0;
-}
-
-int NegativeProcessor::getRawExifTag(const char* exifTagName, dng_urational* valueArray, int32 maxFill) {
-    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
-    if (it == m_RawExif.end()) return 0;
-
-    int lengthToFill = std::min(maxFill, static_cast<int32>(it->count()));
-    for (int i = 0; i < lengthToFill; i++) {
-        Exiv2::URational exiv2Rational = (*it).toRational(i);
-        valueArray[i] = dng_urational(exiv2Rational.first, exiv2Rational.second);
+        valueArray[i] = v;
     }
-    return lengthToFill;*/
+    return i;
+}
+
+int NegativeProcessor::getRawExifTag(ExifTag exifTag, int16* valueArray, int32 maxFill) {
     return 0;
 }
 
-bool NegativeProcessor::getRawExifTag(const char* exifTagName, long* size, unsigned char** data) {
+int NegativeProcessor::getRawExifTag(ExifTag exifTag, dng_urational* valueArray, int32 maxFill) {
+    int i = 0;
+    for (; i < maxFill; i++) {
+        dng_urational v;
+        auto success = this->getRawExifTag(exifTag, i, &v);
+        if (!success) break;
+
+        valueArray[i] = v;
+    }
+    return i;
+}
+
+bool NegativeProcessor::getRawExifTag(ExifTag exifTag, long* size, unsigned char** data) {
     /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
     if (it == m_RawExif.end()) return false;
 
