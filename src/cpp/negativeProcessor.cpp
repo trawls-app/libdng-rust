@@ -672,21 +672,41 @@ bool NegativeProcessor::getInterpretedRawExifTag(const char* exifTagName, int32 
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, dng_string* value) {
-    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
-    if (it == m_RawExif.end()) return false;
+    char * str = exif_bindings.get_string(exif_context, 0);
+    bool success = (str != nullptr);
 
-    value->Set_ASCII((it->print(&m_RawExif)).c_str()); value->TrimLeadingBlanks(); value->TrimTrailingBlanks();
-    return true;*/
-    return false;
+    std::cout << "Exif: " << exifTagName << " = '";
+
+    if (success) {
+        std::cout << str;
+        value->Set_ASCII(str);
+        value->TrimLeadingBlanks(); value->TrimTrailingBlanks();
+    }
+
+    std::cout << "' (" << success << ")" << std::endl;
+
+    exif_bindings.free_rs_string(str);
+    return success;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, dng_date_time_info* value) {
-    /*Exiv2::ExifData::const_iterator it = m_RawExif.findKey(Exiv2::ExifKey(exifTagName));
-    if (it == m_RawExif.end()) return false;
+    char * str = exif_bindings.get_string(exif_context, 0);
+    bool success = (str != nullptr);
 
-    dng_date_time dt; dt.Parse((it->print(&m_RawExif)).c_str()); value->SetDateTime(dt);
-    return true;*/
-    return false;
+    std::cout << "Exif: " << exifTagName << " = Date('";
+
+    if (success) {
+        std::cout << str;
+
+        dng_date_time dt;
+        dt.Parse(str);
+        value->SetDateTime(dt);
+    }
+
+    std::cout << "') (" << success << ")" << std::endl;
+
+    exif_bindings.free_rs_string(str);
+    return success;
 }
 
 bool NegativeProcessor::getRawExifTag(const char* exifTagName, int32 component, dng_srational* rational) {

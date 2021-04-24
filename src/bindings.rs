@@ -263,12 +263,20 @@ pub struct ExifBindings {
             arg4: *mut ExifRational,
         ) -> ::std::os::raw::c_uint,
     >,
+    pub get_string: ::std::option::Option<
+        unsafe extern "C" fn(
+            arg1: *mut ::std::os::raw::c_void,
+            arg2: ::std::os::raw::c_uint,
+        ) -> *mut ::std::os::raw::c_char,
+    >,
+    pub free_rs_string:
+        ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_char)>,
 }
 #[test]
 fn bindgen_test_layout_ExifBindings() {
     assert_eq!(
         ::std::mem::size_of::<ExifBindings>(),
-        24usize,
+        40usize,
         concat!("Size of: ", stringify!(ExifBindings))
     );
     assert_eq!(
@@ -304,6 +312,26 @@ fn bindgen_test_layout_ExifBindings() {
             stringify!(ExifBindings),
             "::",
             stringify!(get_rational)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).get_string as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(get_string)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).free_rs_string as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(free_rs_string)
         )
     );
 }
