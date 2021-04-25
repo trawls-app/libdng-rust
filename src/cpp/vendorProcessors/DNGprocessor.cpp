@@ -29,7 +29,7 @@
 
 
 DNGprocessor::DNGprocessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor, Exiv2::Image::AutoPtr &rawImage)
-                             : NegativeProcessor(host, nullptr, nullptr, nullptr) {
+                             : NegativeProcessor(host, nullptr, ExifBindings(), nullptr, nullptr, nullptr) {
     // -----------------------------------------------------------------------------------------
     // Re-read source DNG using DNG SDK - we're ignoring the LibRaw/Exiv2 data structures from now on
 

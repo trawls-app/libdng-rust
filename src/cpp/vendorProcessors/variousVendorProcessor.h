@@ -30,5 +30,6 @@ public:
 
 protected:
    VariousVendorProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info,
-                          const char *make, const char *model);
+                          ExifBindings exif_bindings, void *exif_context, const char *make,
+                          const char *model);
 };

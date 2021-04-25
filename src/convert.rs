@@ -2,6 +2,7 @@ use std::env;
 use rawloader;
 use std::path::Path;
 
+use libdng::exif::ExifBox;
 use libdng::image_info::DNGWriting;
 
 
@@ -18,6 +19,7 @@ fn main() {
     let file_out_dng = file_out.to_owned() + ".dng";
 
     println!("Converting '{}' to '{}' and '{}'", file_in, file_out_jpg, file_out_dng);
+
     let image = rawloader::decode_file(file_in).unwrap();
     let writer = image.get_dng_writer();
 

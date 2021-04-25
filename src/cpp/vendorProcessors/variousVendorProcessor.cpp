@@ -30,8 +30,10 @@
 
 
 VariousVendorProcessor::VariousVendorProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info,
-                                               const char *make, const char *model)
-                                             : NegativeProcessor(host, image_info, make, model) {}
+                                               ExifBindings exif_bindings, void *exif_context, const char *make,
+                                               const char *model)
+                                             : NegativeProcessor(host, image_info, exif_bindings, exif_context, make,
+                                                                 model) {}
 
 
 void setString(uint32 inInt, dng_string *outString) {
@@ -48,7 +50,7 @@ void VariousVendorProcessor::setDNGPropertiesFromRaw() {
     // Vendor specific crop size data
 
     uint32 cropWidth = 1 >> 30, cropHeight = 1 >> 30, leftMargin = 1 >> 30, topMargin = 1 >> 30;
-
+/*
     // Nikon -----------------------------------------------------------------------------------
     uint32 nikonCrop[16];
     if (getRawExifTag("Exif.Nikon3.CropHiSpeed", nikonCrop, 7) == 7) {
@@ -88,7 +90,7 @@ void VariousVendorProcessor::setDNGPropertiesFromRaw() {
 
     // Panasonic -------------------------------------------------------------------------------
     getRawExifTag("Exif.Panasonic.ImageWidth", 0, &cropWidth);
-    getRawExifTag("Exif.Panasonic.ImageHeight", 0, &cropHeight);
+    getRawExifTag("Exif.Panasonic.ImageHeight", 0, &cropHeight);*/
 
     // Set crop --------------------------------------------------------------------------------
     // this looks complicated but just checks that we're in bounds before setting crop 
@@ -120,7 +122,7 @@ void VariousVendorProcessor::setExifFromRaw(const dng_date_time_info &dateTimeNo
 
     // -----------------------------------------------------------------------------------------
     // Nikon Makernotes
-
+/*
     getRawExifTag("Exif.Nikon3.Lens", negExif->fLensInfo, 4);
     if (getRawExifTag("Exif.NikonLd1.LensIDNumber", 0, &tmp_uint32)) setString(tmp_uint32, &negExif->fLensID);
     if (getRawExifTag("Exif.NikonLd2.LensIDNumber", 0, &tmp_uint32)) setString(tmp_uint32, &negExif->fLensID);
@@ -248,6 +250,6 @@ void VariousVendorProcessor::setExifFromRaw(const dng_date_time_info &dateTimeNo
     // -----------------------------------------------------------------------------------------
     // Sony Makernotes
 
-    if (getRawExifTag("Exif.Sony2.LensID", 0, &tmp_uint32)) setString(tmp_uint32, &negExif->fLensID);
+    if (getRawExifTag("Exif.Sony2.LensID", 0, &tmp_uint32)) setString(tmp_uint32, &negExif->fLensID);*/
 }
 

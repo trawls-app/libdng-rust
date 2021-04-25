@@ -30,7 +30,7 @@
 // TODO/FIXME: Fuji support is currently broken!
 
 FujiProcessor::FujiProcessor(AutoPtr<dng_host> &host, LibRaw *rawProcessor, Exiv2::Image::AutoPtr &rawImage)
-                           : NegativeProcessor(host, nullptr, nullptr, nullptr) {
+                           : NegativeProcessor(host, nullptr, ExifBindings(), nullptr, nullptr, nullptr) {
     m_fujiRotate90 = (2 == m_RawProcessor->COLOR(0, 1)) && (1 == m_RawProcessor->COLOR(1, 0));
 }
 

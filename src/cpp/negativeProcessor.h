@@ -33,8 +33,9 @@ const char* getDngErrorMessage(int errorCode);
 class NegativeProcessor {
 public:
    static NegativeProcessor *
-   createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info, const char *make,
-                   const char *model);
+   createProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info, ExifBindings exif_bindings,
+                   void *exif_context,
+                   const char *make, const char *model);
    virtual ~NegativeProcessor();
 
    dng_negative* getNegative() {return m_negative.Get();}
@@ -49,29 +50,31 @@ public:
    virtual void embedOriginalRaw(const char *rawFilename);
 
 protected:
-   NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info, const char *make,
-                     const char *model);
+   NegativeProcessor(AutoPtr<dng_host> &host, ImageInfoContainer image_info, ExifBindings exif_bindings,
+                     void *exif_context, const char *make, const char *model);
 
    virtual dng_memory_stream* createDNGPrivateTag();
 
    // helper functions
    bool getInterpretedRawExifTag(const char* exifTagName, int32 component, uint32* value);
 
-   bool getRawExifTag(const char* exifTagName, dng_string* value);
-   bool getRawExifTag(const char* exifTagName, dng_date_time_info* value);
-   bool getRawExifTag(const char* exifTagName, int32 component, dng_srational* rational);
-   bool getRawExifTag(const char* exifTagName, int32 component, dng_urational* rational);
-   bool getRawExifTag(const char* exifTagName, int32 component, uint32* value);
+   bool getRawExifTag(ExifTag exifTag, dng_string* value);
+   bool getRawExifTag(ExifTag exifTag, dng_date_time_info* value);
+   bool getRawExifTag(ExifTag exifTag, int32 component, dng_srational* rational);
+   bool getRawExifTag(ExifTag exifTag, int32 component, dng_urational* rational);
+   bool getRawExifTag(ExifTag exifTag, int32 component, uint32* value);
 
-   int  getRawExifTag(const char* exifTagName, uint32* valueArray, int32 maxFill);
-   int  getRawExifTag(const char* exifTagName, int16* valueArray, int32 maxFill);
-   int  getRawExifTag(const char* exifTagName, dng_urational* valueArray, int32 maxFill);
+   int  getRawExifTag(ExifTag exifTag, uint32* valueArray, int32 maxFill);
+   int  getRawExifTag(ExifTag exifTag, int16* valueArray, int32 maxFill);
+   int  getRawExifTag(ExifTag exifTag, dng_urational* valueArray, int32 maxFill);
 
-   bool getRawExifTag(const char* exifTagName, long* size, unsigned char** data);
+   bool getRawExifTag(ExifTag exifTag, long* size, unsigned char** data);
 
    unsigned short int image_width, image_height;
    std::string make, model;
    ImageInfoContainer rs_image;
+   ExifBindings exif_bindings;
+   void * exif_context;
 
    // Source: Raw-file
    //AutoPtr<LibRaw> m_RawProcessor;

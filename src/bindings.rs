@@ -152,3 +152,279 @@ fn bindgen_test_layout_ImageInfoContainer() {
         )
     );
 }
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct ExifRational {
+    pub numerator: ::std::os::raw::c_int,
+    pub denominator: ::std::os::raw::c_int,
+}
+#[test]
+fn bindgen_test_layout_ExifRational() {
+    assert_eq!(
+        ::std::mem::size_of::<ExifRational>(),
+        8usize,
+        concat!("Size of: ", stringify!(ExifRational))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<ExifRational>(),
+        4usize,
+        concat!("Alignment of ", stringify!(ExifRational))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifRational>())).numerator as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifRational),
+            "::",
+            stringify!(numerator)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifRational>())).denominator as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifRational),
+            "::",
+            stringify!(denominator)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct ExifURational {
+    pub numerator: ::std::os::raw::c_uint,
+    pub denominator: ::std::os::raw::c_uint,
+}
+#[test]
+fn bindgen_test_layout_ExifURational() {
+    assert_eq!(
+        ::std::mem::size_of::<ExifURational>(),
+        8usize,
+        concat!("Size of: ", stringify!(ExifURational))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<ExifURational>(),
+        4usize,
+        concat!("Alignment of ", stringify!(ExifURational))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifURational>())).numerator as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifURational),
+            "::",
+            stringify!(numerator)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifURational>())).denominator as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifURational),
+            "::",
+            stringify!(denominator)
+        )
+    );
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct ExifBindings {
+    pub get_uint: ::std::option::Option<
+        unsafe extern "C" fn(
+            arg1: *mut ::std::os::raw::c_void,
+            arg2: ::std::os::raw::c_uint,
+            arg3: ::std::os::raw::c_ushort,
+            arg4: *mut ::std::os::raw::c_uint,
+        ) -> ::std::os::raw::c_uint,
+    >,
+    pub get_urational: ::std::option::Option<
+        unsafe extern "C" fn(
+            arg1: *mut ::std::os::raw::c_void,
+            arg2: ::std::os::raw::c_uint,
+            arg3: ::std::os::raw::c_ushort,
+            arg4: *mut ExifURational,
+        ) -> ::std::os::raw::c_uint,
+    >,
+    pub get_rational: ::std::option::Option<
+        unsafe extern "C" fn(
+            arg1: *mut ::std::os::raw::c_void,
+            arg2: ::std::os::raw::c_uint,
+            arg3: ::std::os::raw::c_ushort,
+            arg4: *mut ExifRational,
+        ) -> ::std::os::raw::c_uint,
+    >,
+    pub get_string: ::std::option::Option<
+        unsafe extern "C" fn(
+            arg1: *mut ::std::os::raw::c_void,
+            arg2: ::std::os::raw::c_uint,
+        ) -> *mut ::std::os::raw::c_char,
+    >,
+    pub free_rs_string:
+        ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_char)>,
+}
+#[test]
+fn bindgen_test_layout_ExifBindings() {
+    assert_eq!(
+        ::std::mem::size_of::<ExifBindings>(),
+        40usize,
+        concat!("Size of: ", stringify!(ExifBindings))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<ExifBindings>(),
+        8usize,
+        concat!("Alignment of ", stringify!(ExifBindings))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).get_uint as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(get_uint)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).get_urational as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(get_urational)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).get_rational as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(get_rational)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).get_string as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(get_string)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<ExifBindings>())).free_rs_string as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(ExifBindings),
+            "::",
+            stringify!(free_rs_string)
+        )
+    );
+}
+pub const ExifTag_GPSInfo_GPSAltitude: ExifTag = 0;
+pub const ExifTag_GPSInfo_GPSAltitudeRef: ExifTag = 1;
+pub const ExifTag_GPSInfo_GPSAreaInformation: ExifTag = 2;
+pub const ExifTag_GPSInfo_GPSDateStamp: ExifTag = 3;
+pub const ExifTag_GPSInfo_GPSDestBearing: ExifTag = 4;
+pub const ExifTag_GPSInfo_GPSDestBearingRef: ExifTag = 5;
+pub const ExifTag_GPSInfo_GPSDestDistance: ExifTag = 6;
+pub const ExifTag_GPSInfo_GPSDestDistanceRef: ExifTag = 7;
+pub const ExifTag_GPSInfo_GPSDestLatitude: ExifTag = 8;
+pub const ExifTag_GPSInfo_GPSDestLatitudeRef: ExifTag = 9;
+pub const ExifTag_GPSInfo_GPSDestLongitude: ExifTag = 10;
+pub const ExifTag_GPSInfo_GPSDestLongitudeRef: ExifTag = 11;
+pub const ExifTag_GPSInfo_GPSDifferential: ExifTag = 12;
+pub const ExifTag_GPSInfo_GPSDOP: ExifTag = 13;
+pub const ExifTag_GPSInfo_GPSImgDirection: ExifTag = 14;
+pub const ExifTag_GPSInfo_GPSImgDirectionRef: ExifTag = 15;
+pub const ExifTag_GPSInfo_GPSLatitude: ExifTag = 16;
+pub const ExifTag_GPSInfo_GPSLatitudeRef: ExifTag = 17;
+pub const ExifTag_GPSInfo_GPSLongitude: ExifTag = 18;
+pub const ExifTag_GPSInfo_GPSLongitudeRef: ExifTag = 19;
+pub const ExifTag_GPSInfo_GPSMapDatum: ExifTag = 20;
+pub const ExifTag_GPSInfo_GPSMeasureMode: ExifTag = 21;
+pub const ExifTag_GPSInfo_GPSProcessingMethod: ExifTag = 22;
+pub const ExifTag_GPSInfo_GPSSatellites: ExifTag = 23;
+pub const ExifTag_GPSInfo_GPSSpeed: ExifTag = 24;
+pub const ExifTag_GPSInfo_GPSSpeedRef: ExifTag = 25;
+pub const ExifTag_GPSInfo_GPSStatus: ExifTag = 26;
+pub const ExifTag_GPSInfo_GPSTimeStamp: ExifTag = 27;
+pub const ExifTag_GPSInfo_GPSTrack: ExifTag = 28;
+pub const ExifTag_GPSInfo_GPSTrackRef: ExifTag = 29;
+pub const ExifTag_GPSInfo_GPSVersionID: ExifTag = 30;
+pub const ExifTag_Image_Artist: ExifTag = 31;
+pub const ExifTag_Image_Copyright: ExifTag = 32;
+pub const ExifTag_Image_DateTime: ExifTag = 33;
+pub const ExifTag_Image_ImageDescription: ExifTag = 34;
+pub const ExifTag_Image_Make: ExifTag = 35;
+pub const ExifTag_Image_Model: ExifTag = 36;
+pub const ExifTag_Image_Software: ExifTag = 37;
+pub const ExifTag_Iop_InteroperabilityIndex: ExifTag = 38;
+pub const ExifTag_Iop_InteroperabilityVersion: ExifTag = 39;
+pub const ExifTag_MakerNote_ByteOrder: ExifTag = 40;
+pub const ExifTag_MakerNote_Offset: ExifTag = 41;
+pub const ExifTag_Photo_ApertureValue: ExifTag = 42;
+pub const ExifTag_Photo_BodySerialNumber: ExifTag = 43;
+pub const ExifTag_Photo_BrightnessValue: ExifTag = 44;
+pub const ExifTag_Photo_CameraOwnerName: ExifTag = 45;
+pub const ExifTag_Photo_ColorSpace: ExifTag = 46;
+pub const ExifTag_Photo_ComponentsConfiguration: ExifTag = 47;
+pub const ExifTag_Photo_CompressedBitsPerPixel: ExifTag = 48;
+pub const ExifTag_Photo_Contrast: ExifTag = 49;
+pub const ExifTag_Photo_CustomRendered: ExifTag = 50;
+pub const ExifTag_Photo_DateTimeDigitized: ExifTag = 51;
+pub const ExifTag_Photo_DateTimeOriginal: ExifTag = 52;
+pub const ExifTag_Photo_DigitalZoomRatio: ExifTag = 53;
+pub const ExifTag_Photo_ExifVersion: ExifTag = 54;
+pub const ExifTag_Photo_ExposureBiasValue: ExifTag = 55;
+pub const ExifTag_Photo_ExposureIndex: ExifTag = 56;
+pub const ExifTag_Photo_ExposureMode: ExifTag = 57;
+pub const ExifTag_Photo_ExposureProgram: ExifTag = 58;
+pub const ExifTag_Photo_ExposureTime: ExifTag = 59;
+pub const ExifTag_Photo_FileSource: ExifTag = 60;
+pub const ExifTag_Photo_Flash: ExifTag = 61;
+pub const ExifTag_Photo_FNumber: ExifTag = 62;
+pub const ExifTag_Photo_FocalLength: ExifTag = 63;
+pub const ExifTag_Photo_FocalLengthIn35mmFilm: ExifTag = 64;
+pub const ExifTag_Photo_FocalPlaneResolutionUnit: ExifTag = 65;
+pub const ExifTag_Photo_FocalPlaneXResolution: ExifTag = 66;
+pub const ExifTag_Photo_FocalPlaneYResolution: ExifTag = 67;
+pub const ExifTag_Photo_GainControl: ExifTag = 68;
+pub const ExifTag_Photo_Gamma: ExifTag = 69;
+pub const ExifTag_Photo_ISOSpeed: ExifTag = 70;
+pub const ExifTag_Photo_ISOSpeedLatitudeyyy: ExifTag = 71;
+pub const ExifTag_Photo_ISOSpeedLatitudezzz: ExifTag = 72;
+pub const ExifTag_Photo_ISOSpeedRatings: ExifTag = 73;
+pub const ExifTag_Photo_LensMake: ExifTag = 74;
+pub const ExifTag_Photo_LensModel: ExifTag = 75;
+pub const ExifTag_Photo_LensSerialNumber: ExifTag = 76;
+pub const ExifTag_Photo_LensSpecification: ExifTag = 77;
+pub const ExifTag_Photo_LightSource: ExifTag = 78;
+pub const ExifTag_Photo_MakerNote: ExifTag = 79;
+pub const ExifTag_Photo_MaxApertureValue: ExifTag = 80;
+pub const ExifTag_Photo_MeteringMode: ExifTag = 81;
+pub const ExifTag_Photo_PixelXDimension: ExifTag = 82;
+pub const ExifTag_Photo_PixelYDimension: ExifTag = 83;
+pub const ExifTag_Photo_RecommendedExposureIndex: ExifTag = 84;
+pub const ExifTag_Photo_Saturation: ExifTag = 85;
+pub const ExifTag_Photo_SceneCaptureType: ExifTag = 86;
+pub const ExifTag_Photo_SceneType: ExifTag = 87;
+pub const ExifTag_Photo_SensingMethod: ExifTag = 88;
+pub const ExifTag_Photo_SensitivityType: ExifTag = 89;
+pub const ExifTag_Photo_Sharpness: ExifTag = 90;
+pub const ExifTag_Photo_ShutterSpeedValue: ExifTag = 91;
+pub const ExifTag_Photo_StandardOutputSensitivity: ExifTag = 92;
+pub const ExifTag_Photo_SubjectArea: ExifTag = 93;
+pub const ExifTag_Photo_SubjectDistance: ExifTag = 94;
+pub const ExifTag_Photo_SubjectDistanceRange: ExifTag = 95;
+pub const ExifTag_Photo_UserComment: ExifTag = 96;
+pub const ExifTag_Photo_WhiteBalance: ExifTag = 97;
+pub type ExifTag = ::std::os::raw::c_uint;

@@ -1,5 +1,8 @@
+#![allow(non_upper_case_globals)]
+
 pub mod image_info;
 pub mod bindings;
+pub mod exif;
 
 use std::ffi::CString;
 use std::ffi::c_void;
@@ -7,14 +10,14 @@ use std::os::raw::c_char;
 use std::os::raw::c_ushort;
 use std::path::Path;
 use bindings::ImageInfoContainer;
+use crate::exif::ExifBox;
 
 
 extern "C" {
-    fn createConverter(image: ImageInfoContainer, make: *const c_char, model: *const c_char) -> *const c_void;
+    fn createConverter(image: ImageInfoContainer, image_buffer: *mut c_ushort, exif_bindings: bindings::ExifBindings, exif_context: *const c_void, make: *const c_char, model: *const c_char) -> *const c_void;
     fn destroyConverter(handler: *const c_void);
     fn callDummy(handler: *const c_void);
     fn setAppName(handler: *const c_void, app_name: *const c_char, app_version: *const c_char);
-    fn buildNegative(handler: *const c_void, image_buffer: *mut c_ushort);
     fn writeDNG(handler: *const c_void, path: *const c_char);
     fn writeTIFF(handler: *const c_void, path: *const c_char);
     fn writeJPEG(handler: *const c_void, path: *const c_char);
@@ -22,19 +25,22 @@ extern "C" {
 
 
 pub struct DNGWriter {
-    handler: *const c_void
+    handler: *const c_void,
 }
 
 
 impl DNGWriter {
-    pub fn new(info: ImageInfoContainer, make: String, model: String) -> DNGWriter {
-        //let mut image_info = Box::new(info);
+    pub fn new(info: ImageInfoContainer, image_data: Vec<u16>, mut exif: ExifBox, make: String, model: String) -> DNGWriter {
         let make_str = CString::new(make).unwrap();
         let model_str = CString::new(model).unwrap();
+        let mut data = image_data.into_boxed_slice();
 
         unsafe {
             DNGWriter {
                 handler: createConverter( info,
+                                          data.as_mut_ptr(),
+                                          bindings::ExifBindings::create(),
+                                          &mut exif as *mut exif::ExifBox as *mut c_void,
                                           make_str.as_ptr(),
                                           model_str.as_ptr()
                 )
@@ -54,15 +60,6 @@ impl DNGWriter {
 
         unsafe {
             setAppName(self.handler, app_str.as_ptr(), ver_str.as_ptr())
-        }
-    }
-
-    pub fn build_negative(&self, image_data: Vec<u16>) {
-        println!("Creating negative of size {}", image_data.len());
-        let mut data = image_data.into_boxed_slice();
-
-        unsafe {
-            buildNegative(self.handler, data.as_mut_ptr());
         }
     }
 

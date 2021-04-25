@@ -51,7 +51,8 @@ dng_file_stream* openFileStream(const std::string &outFilename) {
 }
 
 
-RawConverter::RawConverter(ImageInfoContainer image_info, const char *make, const char *model) {
+RawConverter::RawConverter(ImageInfoContainer image_info, ExifBindings exif_bindings, void *exif_context,
+                           const char *make, const char *model) {
     // -----------------------------------------------------------------------------------------
     // Init XMP SDK and some global variables we will need
 
@@ -66,7 +67,7 @@ RawConverter::RawConverter(ImageInfoContainer image_info, const char *make, cons
 
     CurrentDateTimeAndZone(m_dateTimeNow);
 
-    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, image_info, make, model));
+    m_negProcessor.Reset(NegativeProcessor::createProcessor(m_host, image_info, exif_bindings, exif_context, make, model));
 }
 
 

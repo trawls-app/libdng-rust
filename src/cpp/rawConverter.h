@@ -31,7 +31,8 @@
 
 class RawConverter {
 public:
-   RawConverter(ImageInfoContainer image_info, const char *make, const char *model);
+   RawConverter(ImageInfoContainer image_info, ExifBindings exif_bindings, void *exif_context,
+                const char *make, const char *model);
    virtual ~RawConverter();
 
    void setAppName(const char *app_name, const char *app_version);
