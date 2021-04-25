@@ -173,7 +173,7 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
 	// -----------------------------------------------------------------------------------------
 	// Default scale and crop/active area
 
-    m_negative->SetDefaultScale(dng_urational(image_width, image_width), dng_urational(image_height, image_height));
+    m_negative->SetDefaultScale(dng_urational(1, 1), dng_urational(1, 1));
     m_negative->SetActiveArea(dng_rect(
                 rs_image.active_area.top,
                 rs_image.active_area.left,
@@ -181,22 +181,11 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
                 rs_image.active_area.right
             ));
 
-    /*uint32 cropWidth, cropHeight;
-    if (!getRawExifTag("Exif.Photo.PixelXDimension", 0, &cropWidth) ||
-        !getRawExifTag("Exif.Photo.PixelYDimension", 0, &cropHeight)) {
-        cropWidth = image_width - 16;
-        cropHeight = image_height - 16;
-    }*/
-
-    uint32 cropWidth = rs_image.active_area.right - rs_image.active_area.left;
-    uint32 cropHeight = rs_image.active_area.bottom - rs_image.active_area.top;
+    uint32 cropWidth = rs_image.active_area.right - rs_image.active_area.left - 16;
+    uint32 cropHeight = rs_image.active_area.bottom - rs_image.active_area.top - 16;
     std::cout << "cropWidth " << cropWidth << ", cropHeight " << cropHeight << std::endl;
 
-    int cropLeftMargin = (cropWidth > image_width ) ? 0 : (image_width  - cropWidth) / 2;
-    int cropTopMargin = (cropHeight > image_height) ? 0 : (image_height - cropHeight) / 2;
-
-    //m_negative->SetDefaultCropOrigin(cropLeftMargin, cropTopMargin);
-    m_negative->SetDefaultCropOrigin(rs_image.active_area.left, rs_image.active_area.top);
+    m_negative->SetDefaultCropOrigin(8, 8);
     m_negative->SetDefaultCropSize(cropWidth, cropHeight);
 
     // New
