@@ -30,6 +30,7 @@ jobs:
       with:
         setupOnly: true
         vcpkgDirectory: '${{ github.workspace }}/src/cpp/vcpkg'
+        vcpkgGitCommitId: 7dbc05515b44bf54d2a42b4da9d1e1f910868b86 # HEAD at 2021-07-27
       # Now that vcpkg is installed, it is being used to run with the desired arguments.
 
     - name: Build
