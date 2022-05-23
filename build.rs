@@ -3,12 +3,12 @@ extern crate reqwest;
 
 use cmake::Config;
 use std::env;
-use std::fs::File;
+use std::fs;
 use std::io;
 
 fn download_file(url: &str, out_filepath: &str) {
     let mut resp = reqwest::blocking::get(url).unwrap();
-    let mut output_file = File::create(out_filepath).unwrap();
+    let mut output_file = fs::File::create(out_filepath).unwrap();
     io::copy(&mut resp, &mut output_file).unwrap();
 }
 
@@ -18,11 +18,12 @@ fn main() {
     let dst = if target.contains("apple") || target.contains("linux") {
         Config::new("src/cpp").build()
     } else {
+        fs::create_dir_all("src/cpp/vcpkg/downloads").unwrap();
         download_file(
             "https://github.com/microsoft/vcpkg/files/7075269/nasm-2.15.05-win32.zip",
             "src/cpp/vcpkg/downloads/nasm-2.15.05-win32.zip",
         );
-        
+
         Config::new("src/cpp")
             .static_crt(false)
             .define("VCPKG_TARGET_TRIPLET", "x64-windows-static")
