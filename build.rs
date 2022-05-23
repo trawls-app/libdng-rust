@@ -18,6 +18,11 @@ fn main() {
     let dst = if target.contains("apple") || target.contains("linux") {
         Config::new("src/cpp").build()
     } else {
+        download_file(
+            "https://github.com/microsoft/vcpkg/files/7075269/nasm-2.15.05-win32.zip",
+            "src/cpp/vcpkg/downloads/nasm-2.15.05-win32.zip",
+        );
+        
         Config::new("src/cpp")
             .static_crt(false)
             .define("VCPKG_TARGET_TRIPLET", "x64-windows-static")
@@ -52,11 +57,6 @@ fn main() {
         println!("cargo:rustc-link-lib=static=jpeg");
         println!("cargo:rustc-link-lib=static=z");
     } else {
-        download_file(
-            "https://github.com/microsoft/vcpkg/files/7075269/nasm-2.15.05-win32.zip",
-            "src/cpp/vcpkg/downloads/nasm-2.15.05-win32.zip",
-        );
-
         println!(
             "cargo:rustc-link-search=native={}/build/vcpkg_installed/x64-windows-static/lib",
             path
