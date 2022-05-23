@@ -54,7 +54,7 @@ fn main() {
     } else {
         download_file(
             "https://github.com/microsoft/vcpkg/files/7075269/nasm-2.15.05-win32.zip",
-            "src/cpp/downloads/nasm-2.15.05-win32.zip",
+            "src/cpp/vcpkg/downloads/nasm-2.15.05-win32.zip",
         );
 
         println!(
