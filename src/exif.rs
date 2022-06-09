@@ -3,6 +3,7 @@ use num::rational::Ratio;
 
 use crate::bindings::{ExifBindings, ExifRational, ExifURational, ExifTag};
 use std::ffi::{c_void, CString};
+use chrono::naive::NaiveDateTime;
 
 
 pub trait ExifExtractable {
@@ -10,6 +11,7 @@ pub trait ExifExtractable {
     fn get_urational(&self, tag: ExifTag, index: u16) -> Option<Ratio<u32>>;
     fn get_srational(&self, tag: ExifTag, index: u16) -> Option<Ratio<i32>>;
     fn get_string(&self, tag: ExifTag) -> Option<String>;
+    fn get_datetime(&self, tag: ExifTag) -> Option<NaiveDateTime>;
 }
 
 
@@ -19,6 +21,7 @@ impl ExifExtractable for EmptyExif {
     fn get_urational(&self, tag: u32, index: u16) -> Option<Ratio<u32>> { None }
     fn get_srational(&self, tag: u32, index: u16) -> Option<Ratio<i32>> { None }
     fn get_string(&self, tag: u32) -> Option<String> { None }
+    fn get_datetime(&self, tag: u32) -> Option<NaiveDateTime> { None }
 }
 
 
