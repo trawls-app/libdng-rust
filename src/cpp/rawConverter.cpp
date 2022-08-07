@@ -56,8 +56,6 @@ RawConverter::RawConverter(ImageInfoContainer image_info, ExifBindings exif_bind
     // -----------------------------------------------------------------------------------------
     // Init XMP SDK and some global variables we will need
 
-    std::cout << "Image Info: " << make << " " << model << std::endl;
-
     dng_xmp_sdk::InitializeSDK();
 
     m_host.Reset(dynamic_cast<dng_host*>(new DngHost()));

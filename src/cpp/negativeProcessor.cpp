@@ -183,7 +183,6 @@ void NegativeProcessor::setDNGPropertiesFromRaw() {
 
     uint32 cropWidth = rs_image.active_area.right - rs_image.active_area.left - 16;
     uint32 cropHeight = rs_image.active_area.bottom - rs_image.active_area.top - 16;
-    std::cout << "cropWidth " << cropWidth << ", cropHeight " << cropHeight << std::endl;
 
     m_negative->SetDefaultCropOrigin(8, 8);
     m_negative->SetDefaultCropSize(cropWidth, cropHeight);
@@ -666,7 +665,6 @@ bool NegativeProcessor::getRawExifTag(ExifTag exifTag, dng_string* value) {
     bool success = (str != nullptr);
 
     if (success) {
-        std::cout << str;
         value->Set_ASCII(str);
         value->TrimLeadingBlanks(); value->TrimTrailingBlanks();
     }
@@ -680,8 +678,6 @@ bool NegativeProcessor::getRawExifTag(ExifTag exifTag, dng_date_time_info* value
     bool success = (str != nullptr);
 
     if (success) {
-        std::cout << str;
-
         dng_date_time dt;
         dt.Parse(str);
         value->SetDateTime(dt);

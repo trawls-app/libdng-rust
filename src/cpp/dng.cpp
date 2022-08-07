@@ -28,7 +28,6 @@ createConverter(ImageInfoContainer image_info, unsigned short *image_buffer, Exi
 }
 
 void destroyConverter(RawConverter *handler) {
-    std::cout << "Destroying RawConverter" << std::endl;
     delete handler;
 }
 
@@ -58,7 +57,7 @@ void buildNegative(RawConverter *handler, unsigned short *image_buffer) {
 }
 
 void _write_output(const char *str) {
-    std::cout << str << std::endl;
+    std::cout << "libdng-rs:\t\t" << str << std::endl;
 }
 
 void writeDNG(RawConverter *handler, const char *path) {
