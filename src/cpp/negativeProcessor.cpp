@@ -665,15 +665,11 @@ bool NegativeProcessor::getRawExifTag(ExifTag exifTag, dng_string* value) {
     char * str = exif_bindings.get_string(exif_context, exifTag);
     bool success = (str != nullptr);
 
-    std::cout << "Exif: " << exifTag << " = '";
-
     if (success) {
         std::cout << str;
         value->Set_ASCII(str);
         value->TrimLeadingBlanks(); value->TrimTrailingBlanks();
     }
-
-    std::cout << "' (" << success << ")" << std::endl;
 
     exif_bindings.free_rs_string(str);
     return success;
@@ -683,8 +679,6 @@ bool NegativeProcessor::getRawExifTag(ExifTag exifTag, dng_date_time_info* value
     char * str = exif_bindings.get_string(exif_context, exifTag);
     bool success = (str != nullptr);
 
-    std::cout << "Exif: " << exifTag << " = Date('";
-
     if (success) {
         std::cout << str;
 
@@ -693,8 +687,6 @@ bool NegativeProcessor::getRawExifTag(ExifTag exifTag, dng_date_time_info* value
         value->SetDateTime(dt);
     }
 
-    std::cout << "') (" << success << ")" << std::endl;
-
     exif_bindings.free_rs_string(str);
     return success;
 }
@@ -702,7 +694,6 @@ bool NegativeProcessor::getRawExifTag(ExifTag exifTag, dng_date_time_info* value
 bool NegativeProcessor::getRawExifTag(ExifTag exifTag, int32 component, dng_srational* rational) {
     ExifRational ratio;
     auto success = exif_bindings.get_rational(exif_context, exifTag, component, &ratio);
-    std::cout << "Exif: " << exifTag << "[" << component << "] = " << ratio.numerator << "/" << ratio.denominator << " (" << success << ")" << std::endl;
 
     if (success) { *rational = dng_srational(ratio.numerator, ratio.denominator); return true; }
     return false;
@@ -711,7 +702,6 @@ bool NegativeProcessor::getRawExifTag(ExifTag exifTag, int32 component, dng_srat
 bool NegativeProcessor::getRawExifTag(ExifTag exifTag, int32 component, dng_urational* rational) {
     ExifURational ratio;
     auto success = exif_bindings.get_urational(exif_context, exifTag, component, &ratio);
-    std::cout << "Exif: " << exifTag << "[" << component << "] = " << ratio.numerator << "/" << ratio.denominator << " (" << success << ")" << std::endl;
 
     if (success) { *rational = dng_urational(ratio.numerator, ratio.denominator); return true; }
     return false;
@@ -719,7 +709,6 @@ bool NegativeProcessor::getRawExifTag(ExifTag exifTag, int32 component, dng_urat
 
 bool NegativeProcessor::getRawExifTag(ExifTag exifTag, int32 component, uint32* value) {
     auto success = (bool) exif_bindings.get_uint(exif_context, exifTag, component, value);
-    std::cout << "Exif: " << exifTag << "[" << component << "] = " << *value << " (" << success << ")" << std::endl;
 
     return success;
 }
