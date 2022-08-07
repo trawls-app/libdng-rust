@@ -21,7 +21,7 @@ fn main() {
     println!("Converting '{}' to '{}' and '{}'", file_in, file_out_jpg, file_out_dng);
 
     let image = rawloader::decode_file(file_in).unwrap();
-    let writer = image.get_dng_writer();
+    let writer = image.get_dng_writer().unwrap();
 
     println!("Make: '{}',\tModel: '{}'", image.clean_make, image.clean_model);
     println!("Width: {},\tHeight: {}", image.width, image.height);

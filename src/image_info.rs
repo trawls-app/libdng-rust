@@ -1,6 +1,7 @@
 use crate::bindings::{Area, ImageInfoContainer};
 use crate::exif::{ExifBox, EmptyExif};
 
+use anyhow;
 use arrayvec::ArrayVec;
 use rawloader::RawImage;
 use crate::DNGWriter;
@@ -10,23 +11,23 @@ pub trait RawSavableImage {
     fn get_make_model(&self) -> (String, String);
     fn get_exif_box(&self) -> ExifBox;
     fn get_info_container(&self) -> ImageInfoContainer;
-    fn get_image_data(&self) -> Vec<u16>;
+    fn get_image_data(&self) -> anyhow::Result<Vec<u16>>;
 }
 
 pub trait DNGWriting {
-    fn get_dng_writer(&self) -> DNGWriter;
+    fn get_dng_writer(&self) -> anyhow::Result<DNGWriter>;
 }
 
 impl<T> DNGWriting for T where T: RawSavableImage {
-    fn get_dng_writer(&self) -> DNGWriter {
+    fn get_dng_writer(&self) -> anyhow::Result<DNGWriter> {
         let (make, model) = self.get_make_model();
         let writer = DNGWriter::new(
             self.get_info_container(),
-            self.get_image_data(),
+            self.get_image_data()?,
             self.get_exif_box(),
             make, model);
 
-        writer
+        Ok(writer)
     }
 }
 
@@ -63,11 +64,11 @@ impl RawSavableImage for RawImage {
         }
     }
 
-    fn get_image_data(&self) -> Vec<u16> {
+    fn get_image_data(&self) -> anyhow::Result<Vec<u16>> {
         if let rawloader::RawImageData::Integer(data) = &self.data {
-            data.clone()
+            Ok(data.clone())
         } else {
-            unimplemented!("Can't parse RAWs with non-integer data, yet.");
+            anyhow::bail!("Can't parse RAWs with non-integer data, yet.");
         }
     }
 }

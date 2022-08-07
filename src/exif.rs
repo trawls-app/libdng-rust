@@ -93,7 +93,10 @@ unsafe extern "C" fn exif_get_string(container: *mut c_void, tag: ExifTag) -> *m
 
     match res {
         None => std::ptr::null_mut(),
-        Some(x) => CString::new(x).unwrap().into_raw()
+        Some(x) => match CString::new(x) {
+            Ok(x) => x.into_raw(),
+            Err(_) => std::ptr::null_mut(),
+        }
     }
 }
 
