@@ -29,6 +29,7 @@ typedef struct ExifBindings {
     unsigned int (*get_rational)(void*, unsigned int, unsigned short, ExifRational*);
     char *  (*get_string)(void*, unsigned int);
     void (*free_rs_string)(char*);
+    void (*log_debug)(const char*);
 } ExifBindings;
 
 

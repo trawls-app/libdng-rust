@@ -4,13 +4,13 @@ pub mod image_info;
 pub mod bindings;
 pub mod exif;
 
-use std::ffi::CString;
-use std::ffi::c_void;
+use std::ffi::{c_void, CString, CStr};
 use std::os::raw::c_char;
 use std::os::raw::c_ushort;
 use std::path::Path;
 use bindings::ImageInfoContainer;
 use crate::exif::ExifBox;
+use log::{debug, error, info};
 
 
 extern "C" {
@@ -64,7 +64,7 @@ impl DNGWriter {
     }
 
     pub fn write_dng(&self, output: &Path) {
-        println!("Writing DNG to '{}'...", output.display());
+        info!("Writing DNG to '{}'...", output.display());
         let out_str = CString::new(output.as_os_str().to_str().unwrap()).unwrap();
 
         unsafe {
@@ -73,7 +73,7 @@ impl DNGWriter {
     }
 
     pub fn write_tif(&self, output: &Path) {
-        println!("Writing TIFF to '{}'...", output.display());
+        info!("Writing TIFF to '{}'...", output.display());
         let out_str = CString::new(output.as_os_str().to_str().unwrap()).unwrap();
 
         unsafe {
@@ -82,7 +82,7 @@ impl DNGWriter {
     }
 
     pub fn write_jpg(&self, output: &Path) {
-        println!("Writing JPEG to '{}'...", output.display());
+        info!("Writing JPEG to '{}'...", output.display());
         let out_str = CString::new(output.as_os_str().to_str().unwrap()).unwrap();
 
         unsafe {
@@ -97,6 +97,17 @@ impl Drop for DNGWriter {
         unsafe {
             destroyConverter(self.handler.as_ref().unwrap());
         }
+    }
+}
+
+
+unsafe extern "C" fn log_debug(s: *const c_char) {
+    if s.is_null() { return; }
+    let msg = CStr::from_ptr(s);
+
+    match msg.to_str() {
+        Ok(x) => debug!("{}", x),
+        Err(_) => error!("Can't parse CString"),
     }
 }
 

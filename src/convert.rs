@@ -1,3 +1,6 @@
+extern crate pretty_env_logger;
+#[macro_use] extern crate log;
+
 use std::env;
 use rawloader;
 use std::path::Path;
@@ -7,6 +10,8 @@ use libdng::image_info::DNGWriting;
 
 
 fn main() {
+    pretty_env_logger::init();
+    
     let args: Vec<_> = env::args().collect();
     if args.len() != 3 {
         println!("Usage: {} <file>", args[0]);

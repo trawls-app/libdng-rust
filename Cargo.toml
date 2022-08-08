@@ -10,7 +10,7 @@ edition = "2018"
 name = "libdng"
 path = "src/lib.rs"
 
-[[bin]]
+[[example]]
 name = "conv2dng"
 path = "src/convert.rs"
 
@@ -21,6 +21,10 @@ version = "~3.0.0"
 rawloader = "~0.37.1"
 num = "~0.4.0"
 anyhow = "~1.0.60"
+log = "~0.4.17"
+
+[dev-dependencies]
+pretty_env_logger = "0.4.0"
 
 [build-dependencies]
 cmake = "0.1.45"

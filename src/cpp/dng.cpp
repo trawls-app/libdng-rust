@@ -1,5 +1,4 @@
 #include "dng.h"
-
 #include <iostream>
 
 
@@ -7,7 +6,7 @@ RawConverter *
 createConverter(ImageInfoContainer image_info, unsigned short *image_buffer, ExifBindings exif_bindings, void *exif_context, const char *make,
                 const char *model) {
     auto converter = new RawConverter(image_info, exif_bindings, exif_context, make, model);
-    converter->registerPublisher(_write_output);
+    converter->registerPublisher(exif_bindings.log_debug);
 
     try {
         converter->buildNegative("", image_buffer);
@@ -56,9 +55,6 @@ void buildNegative(RawConverter *handler, unsigned short *image_buffer) {
     }
 }
 
-void _write_output(const char *str) {
-    std::cout << "libdng-rs:\t\t" << str << std::endl;
-}
 
 void writeDNG(RawConverter *handler, const char *path) {
     handler->writeDng(path);

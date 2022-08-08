@@ -4,6 +4,7 @@ use num::rational::Ratio;
 use crate::bindings::{ExifBindings, ExifRational, ExifURational, ExifTag};
 use std::ffi::{c_void, CString};
 use chrono::naive::NaiveDateTime;
+use super::log_debug;
 
 
 pub trait ExifExtractable {
@@ -36,7 +37,8 @@ impl ExifBindings {
             get_urational: Option::from(exif_get_uratio as unsafe extern "C" fn(*mut c_void, u32, u16, *mut ExifURational) -> c_uint),
             get_rational: Option::from(exif_get_sratio as unsafe extern "C" fn(*mut c_void, u32, u16, *mut ExifRational) -> c_uint),
             get_string: Option::from(exif_get_string as unsafe extern "C" fn(*mut c_void, u32) -> *mut c_char),
-            free_rs_string: Option::from(exif_free_string as unsafe extern "C" fn (*mut c_char))
+            free_rs_string: Option::from(exif_free_string as unsafe extern "C" fn (*mut c_char)),
+            log_debug: Option::from(log_debug as unsafe extern "C" fn (*const c_char))
         }
     }
 }
