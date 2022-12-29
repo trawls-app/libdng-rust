@@ -25,38 +25,9 @@
 // =================================================================================================
 
 #define kLittleEndianHost (! kBigEndianHost)
+#define kBigEndianHost 0
 #if XMP_WinBuild
 	#pragma warning ( disable : 4127 )	// conditional expression is constant
-	#define kBigEndianHost 0
-#elif XMP_MacBuild | XMP_iOSBuild
-	#if __BIG_ENDIAN__
-		#define kBigEndianHost 1
-	#elif __LITTLE_ENDIAN__
-		#define kBigEndianHost 0
-	#else
-		#error "Neither __BIG_ENDIAN__ nor __LITTLE_ENDIAN__ is set"
-	#endif
-#elif XMP_AndroidBuild
-    #if __BIG_ENDIAN__
-        #define kBigEndianHost 1
-    #elif __LITTLE_ENDIAN__
-        #define kBigEndianHost 0
-    #else
-        #error "Neither __BIG_ENDIAN__ nor __LITTLE_ENDIAN__ is set"
-    #endif
-#elif XMP_UNIXBuild
-	 #ifndef kBigEndianHost	// Typically in the makefile for generic UNIX.
-		#if __GNUC__ && (__i386__ || __x86_64__)
-			#define kBigEndianHost 0
-		#elif __GNUC__ && (__sparc__)
-			#define kBigEndianHost 1
-			#define kLittleEndianHost 0
-		#else
-			#error "Must define kBigEndianHost as 0 or 1 in the makefile."
-		#endif
-	#endif
-#else
-	#error "Unknown build environment"
 #endif
 
 // =================================================================================================
