@@ -8,7 +8,9 @@ fn main() {
 
     let (dst, triplet) = if target.contains("apple") && (target.contains("aarch64") || target.contains("arm64")) {
         (Config::new("src/cpp").define("VCPKG_TARGET_TRIPLET", "arm64-osx").build(), "arm64-osx")
-    } else if target.contains("apple") || target.contains("linux") {
+    } else if target.contains("apple") {
+        (Config::new("src/cpp").build(), "x64-osx")
+    } else if target.contains("linux") {
         (Config::new("src/cpp").build(), "x64-linux")
     } else {
         (Config::new("src/cpp").static_crt(false).define("VCPKG_TARGET_TRIPLET", "x64-windows-static").build(), "x64-windows-static")
